@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mmusic/common/color_extension.dart';
-import 'package:mmusic/view/main_tabview/splash_view.dart';
+import 'package:mmusic/view/splash_view.dart';
 
 void main() {
   runApp(const MyApp());
