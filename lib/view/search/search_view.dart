@@ -80,6 +80,7 @@ class _SearchViewState extends State<SearchView> {
                       ),
                     ),
                     hintText: "Nhập tên bài hát hoặc tên ca sĩ",
+
                     hintStyle: TextStyle(
                       color: Colors.black.withOpacity(0.28),
                       fontSize: 13,
