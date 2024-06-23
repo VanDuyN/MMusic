@@ -264,13 +264,15 @@ class _HomeViewState extends State<HomeView> {
             children: [
               const TitleSelection(title: "Tiếp tục nghe"),
               SizedBox(
-                height: 250,
                 child: GridView.builder(
+                  shrinkWrap: true,
+                  primary: false,
                   padding: const EdgeInsets.only(left: 15, right: 5),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    crossAxisSpacing: 5.0,
-                    childAspectRatio: 2.4,),
+                    crossAxisSpacing: 3,
+                    mainAxisSpacing: 3,
+                    mainAxisExtent: 83,),
                   itemCount: 6,
                   itemBuilder: (context,index){
                     var mOBJ = homeVM.continueListeningArr[index];
@@ -307,6 +309,7 @@ class _HomeViewState extends State<HomeView> {
               SizedBox(
                 height: 220,
                 child: ListView.builder(
+                  padding:const EdgeInsets.only(left: 20),
                   scrollDirection: Axis.horizontal,
                   itemCount: 6,
                   itemBuilder: (context,index){

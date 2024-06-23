@@ -103,5 +103,26 @@ class HomeViewModel extends GetxController{
   final playListArr = [
 
   ].obs;
+  final  categoryListArr =[
+    {
+      "image":"assets/img/img_7.png",
+      "name":"Pop Mix"
+    },{
+      "image":"assets/img/img_7.png",
+      "name":"Pop Mix"
+    },{
+      "image":"assets/img/img_7.png",
+      "name":"Pop Mix"
+    },{
+      "image":"assets/img/img_7.png",
+      "name":"Pop Mix"
+    },{
+      "image":"assets/img/img_7.png",
+      "name":"Pop Mix"
+    },{
+      "image":"assets/img/img_7.png",
+      "name":"Pop Mix"
+    },
+  ].obs;
 
 }
