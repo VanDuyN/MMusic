@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mmusic/common/color_extension.dart';
 import 'package:get/get.dart';
+import 'package:mmusic/common_widget/category_cell.dart';
+import 'package:mmusic/common_widget/title_selection.dart';
 import 'package:mmusic/view_model/home_view_model.dart';
 class SearchView extends StatefulWidget {
   const SearchView({super.key});
@@ -36,60 +38,103 @@ class _SearchViewState extends State<SearchView> {
           style: TextStyle(
               color: TColor.primary,
               fontSize: 27,
-              fontWeight: FontWeight.w900
+              fontWeight: FontWeight.w700
           ),
         ),
       ),
       ),
-      body: Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                TColor.primary20,
-                Colors.transparent,
-                Colors.transparent,
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            )
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-             Container(
-               margin: const EdgeInsets.only(top: 30,left: 30,right: 40,bottom: 20),
-                height: 50,
-                  decoration: BoxDecoration(
-                    color: TColor.primaryText,
-                    borderRadius: BorderRadius.circular(19),
-                  ),
-                child: TextField(
-                  controller: homeVM.txtSearch.value,
-                  decoration: InputDecoration(
-                    focusedBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    prefixIcon: Container(
-                      margin: const EdgeInsets.only(left: 10,bottom: 1,top: 1,right: 5),
-                      alignment: Alignment.centerLeft,
-                      width: 30,
-                      child: Icon(
-                        weight: 20,
-                        Icons.search,
-                        color: Colors.black.withOpacity(0.28),
+      body: SingleChildScrollView(
+        child: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  TColor.primary20,
+                  Colors.transparent,
+                  Colors.transparent,
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              )
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+               Center(
+                 child: Container(
+                   margin: const EdgeInsets.only(top: 30,left: 35,right: 40,bottom: 20),
+                    height: 50,
+                    alignment: Alignment.center,
+                    transformAlignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: TColor.primaryText,
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    child: TextField(
+                      controller: homeVM.txtSearch.value,
+                      decoration: InputDecoration(
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        prefixIcon: Container(
+                          margin: const EdgeInsets.only(left: 20,bottom: 1,top: 1,right: 1),
+                          alignment: Alignment.centerLeft,
+                          width: 48,
+                          child: Icon(
+                            weight: 20,
+                            Icons.search,
+                            color: Colors.black.withOpacity(0.28),
+                          ),
+                        ),
+                        hintText: "Nhập tên bài hát hoặc tên ca sĩ",
+                        hintStyle: TextStyle(
+                          color: Colors.black.withOpacity(0.28),
+                          fontSize: 13,
+                        )
                       ),
                     ),
-                    hintText: "Nhập tên bài hát hoặc tên ca sĩ",
-
-                    hintStyle: TextStyle(
-                      color: Colors.black.withOpacity(0.28),
-                      fontSize: 13,
-                    )
                   ),
+               ),
+              const TitleSelection(title: "Dành cho bạn"),
+              SizedBox(
+                height: 280,
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  primary: false,
+                  padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 20,
+                    mainAxisExtent: 110,),
+                  itemCount: 4,
+                  itemBuilder: (context,index){
+                    var mOBJ = homeVM.categoryListArr[index];
+                    return CategoryCell(mObj: mOBJ,);
+                  },
                 ),
               ),
-          ],
-        )
+              const TitleSelection(title: "Tất cả"),
+              SizedBox(
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  primary: false,
+                  padding: const EdgeInsets.only(left: 15, right: 15, top: 20, bottom: 10),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 20,
+                    mainAxisExtent: 110,),
+                  itemCount: 6,
+                  itemBuilder: (context,index){
+                    var mOBJ = homeVM.categoryListArr[index];
+                    return CategoryCell(mObj: mOBJ,);
+                  },
+                ),
+              ),
+            ],
+          )
+        ),
       ),
     );
   }

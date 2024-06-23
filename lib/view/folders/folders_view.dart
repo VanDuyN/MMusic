@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mmusic/common/color_extension.dart';
-import 'package:get/get.dart';
-import '../../view_model/splash_view_model.dart';
+import 'package:mmusic/view/folders/your_folder_view.dart';
 class FoldersView extends StatefulWidget {
   const FoldersView({super.key});
 
@@ -70,6 +69,7 @@ class _FoldersViewState extends State<FoldersView> with SingleTickerProviderStat
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
         SizedBox(
           height: kToolbarHeight,
@@ -109,7 +109,7 @@ class _FoldersViewState extends State<FoldersView> with SingleTickerProviderStat
         Expanded(child:TabBarView(
           controller: controller,
           children: const [
-            Center(child: Text("Thư mục"),),
+            YourFolderView(),
             Center(child: Text("Thư mục"),),
             Center(child: Text("Thư mục"),),
             Center(child: Text("Thư mục"),),

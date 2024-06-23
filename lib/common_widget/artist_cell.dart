@@ -6,8 +6,7 @@ class ArtistCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 180,
-      margin: const EdgeInsets.only(left: 15, right: 5),
+      padding: const EdgeInsets.only(right: 15),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
