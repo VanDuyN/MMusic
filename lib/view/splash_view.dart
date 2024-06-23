@@ -15,7 +15,6 @@ class _SplashViewState extends State<SplashView>{
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
     super.initState();
     splashVM.loadView();
-    
   }
   @override
   Widget build(BuildContext context){
