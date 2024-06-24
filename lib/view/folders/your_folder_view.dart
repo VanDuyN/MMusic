@@ -58,7 +58,7 @@ class _YourFolderViewState extends State<YourFolderView> {
                 Container(
                   decoration: BoxDecoration(
                       color: TColor.primary,
-                      borderRadius: BorderRadius.circular(25)
+                      borderRadius: BorderRadius.circular(25),
                   ),
                   child: IconButton(
                       onPressed: (){},
@@ -84,26 +84,20 @@ class _YourFolderViewState extends State<YourFolderView> {
                 ),
               ],
             ),
+
             Row(
               children: [
+                Image.asset("assets/img/sort.png"),
                 Container(
-                  margin: const EdgeInsets.only(left: 10),
-                  child: Text(
-                    "Bài hát bạn yêu thích",
-                    style: TextStyle(
-                        color: TColor.primary,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600
-                    ),
-                  ),
-                ),
+                  margin: const EdgeInsets.symmetric(vertical: 20,horizontal: 10),
+                  child: Text("Đã nghe gần đây", style: TextStyle(fontSize: 16,color: TColor.primary),),
+
+
+                )
+                //Image.asset("assets/img/sort.png",width: 50,height: 50),
+                // const TitleSelectionColor(title: "Đã nghe gần đây")
               ],
-            ),
-            Row(
-              children: [
-                Image.asset("assets/img/sort.png",width: 20,height: 20,),
-                const TitleSelectionColor(title: "Đã nghe gần đây")
-              ],
+
             )
           ],
         ),
