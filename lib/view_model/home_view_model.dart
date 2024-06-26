@@ -59,13 +59,13 @@ class HomeViewModel extends GetxController{
       "name":"Khi người mình yêu khóc",
       "artist":"Phan Mạnh Quỳnh"
     },{
-      "image":"assets/img/img_7.png",
-      "name":"Pop Mix",
-      "artist":"Boiz"
+      "image":"assets/img/img_15.png",
+      "name":"Không phải dạng vừa đâu",
+      "artist":"Sơn tùng MTP"
     },{
-      "image":"assets/img/img_7.png",
-      "name":"Pop Mix",
-      "artist":"Boiz"
+      "image":"assets/img/img_16.png",
+      "name":"Khi phải quên đi",
+      "artist":"Phan Mạnh Quỳnh"
     },{
       "image":"assets/img/img_7.png",
       "name":"Pop Mix",
@@ -97,6 +97,21 @@ class HomeViewModel extends GetxController{
     },{
       "image":"assets/img/img_7.png",
       "name":"Pop Mix"
+    },
+  ].obs;
+  final  yourFolderListArr =[
+    {
+      "name":"moods",
+      "number":"11"
+    },{
+      "name":"blends",
+      "number":"8"
+    },{
+      "name":"favs",
+      "number":"14"
+    },{
+      "name":"random",
+      "number":"10"
     },
   ].obs;
   //đề xuất

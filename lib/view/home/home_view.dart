@@ -10,7 +10,6 @@ import 'package:mmusic/view_model/home_view_model.dart';
 import 'package:mmusic/view_model/splash_view_model.dart';
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
-
   @override
   State<HomeView> createState() => _HomeViewState();
 }
@@ -180,7 +179,7 @@ class _HomeViewState extends State<HomeView> {
       appBar: AppBar(
         titleSpacing: 0.0,
         leadingWidth: 70,
-        backgroundColor: TColor.primary20,
+        backgroundColor: TColor.primary30,
         elevation: 0,
         leading: IconButton(
             onPressed: () {
@@ -250,7 +249,7 @@ class _HomeViewState extends State<HomeView> {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              TColor.primary20,
+              TColor.primary30,
               Colors.transparent,
               Colors.transparent,
             ],
