@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mmusic/common/color_extension.dart';
 import 'package:mmusic/view/folders/your_folder_view.dart';
+import 'package:mmusic/view/folders/your_library_view.dart';
+import 'package:mmusic/view/folders/your_playlist_view.dart';
 class FoldersView extends StatefulWidget {
   const FoldersView({super.key});
 
@@ -16,7 +18,7 @@ class _FoldersViewState extends State<FoldersView> with SingleTickerProviderStat
   void initState() {
     // TODO: implement initState
     super.initState();
-    controller = TabController(length:  4, vsync: this);
+    controller = TabController(length:  5, vsync: this);
     controller?.addListener((){
       selectTab = controller?.index?? 0;
       setState(() {
@@ -47,7 +49,7 @@ class _FoldersViewState extends State<FoldersView> with SingleTickerProviderStat
             child: Text(
               "Thư viện của bạn",
               style: TextStyle(
-                color: TColor.primary,
+                color: TColor.primaryTextM,
                 fontSize: 27,
                 fontWeight: FontWeight.w900
               ),
@@ -93,6 +95,9 @@ class _FoldersViewState extends State<FoldersView> with SingleTickerProviderStat
             ),
             tabs: const [
             Tab(
+              text: "Thư viện",
+            ),
+            Tab(
               text: "Thư mục",
             ),
             Tab(
@@ -109,8 +114,9 @@ class _FoldersViewState extends State<FoldersView> with SingleTickerProviderStat
         Expanded(child:TabBarView(
           controller: controller,
           children: const [
+            YourLibraryView(),
             YourFolderView(),
-            Center(child: Text("Thư mục"),),
+            YourPlaylistView(),
             Center(child: Text("Thư mục"),),
             Center(child: Text("Thư mục"),),
           ],

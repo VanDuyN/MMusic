@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:mmusic/common/color_extension.dart';
 import 'package:get/get.dart';
-import 'package:mmusic/common_widget/your_folder_cell.dart';
+import 'package:mmusic/common/color_extension.dart';
 import 'package:mmusic/common_widget/title_selection_color.dart';
+import 'package:mmusic/common_widget/your_playlist_cell.dart';
 import 'package:mmusic/view_model/home_view_model.dart';
-class YourFolderView extends StatefulWidget {
-  const YourFolderView({super.key});
+class YourPlaylistView extends StatefulWidget {
+  const YourPlaylistView({super.key});
+
   @override
-  State<YourFolderView> createState() => _YourFolderState();
+  State<YourPlaylistView> createState() => _PlaylistViewState();
 }
 
-class _YourFolderState extends State<YourFolderView> {
+class _PlaylistViewState extends State<YourPlaylistView> {
   final homeVM = Get.put(HomeViewModel());
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,6 @@ class _YourFolderState extends State<YourFolderView> {
                           colors: [
                             TColor.primaryTopIcon,
                             TColor.primaryBottomIcon,
-
                           ],
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
@@ -94,7 +94,7 @@ class _YourFolderState extends State<YourFolderView> {
                   Container(
                     margin: const EdgeInsets.only(left: 10),
                     child: Text(
-                      "Bài hát bạn yêu thích",
+                      "Danh sách phát bạn yêu thích",
                       style: TextStyle(
                           color: TColor.primaryText,
                           fontSize: 20,
@@ -115,7 +115,7 @@ class _YourFolderState extends State<YourFolderView> {
                     "assets/img/sort.png",
                     width: 17,
                     height: 13,),
-                  const TitleSelectionColor(title: "Đã nghe gần đây")
+                  const TitleSelectionColor(title: "Danh sách phát gần đây")
                 ],
               ),
             ),
@@ -127,49 +127,12 @@ class _YourFolderState extends State<YourFolderView> {
                 scrollDirection: Axis.vertical,
                 itemCount: 4,
                 itemBuilder: (context,index){
-                  var mOBJ = homeVM.yourFolderListArr[index];
-                  return YourFolderCell(mObj: mOBJ,);
+                  var mOBJ = homeVM.playListArr[index];
+                  return YourPlaylistCell(mObj: mOBJ,);
                 },
               ),
             ),
-            Container(
-              margin: const EdgeInsets.only(top: 15),
-              child: Row(
-                children:[
-                  Image.asset(
-                    "assets/img/img_7.png",
-                    width: 84,
-                    height: 84,
-                    fit: BoxFit.fill,
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(left: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          " Bài hát bạn đã thích",
-                          style: TextStyle(
-                              color: TColor.primaryText,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w700
-                          ),
-                        ),
-                        Text(
-                          "80 bài hát",
-                          style: TextStyle(
-                              color: TColor.primaryText60,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),          ],
+          ],
         ),
       ),
     );
