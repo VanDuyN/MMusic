@@ -8,12 +8,12 @@ class TitleSelectionColor extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Padding(padding:
-    const EdgeInsets.only(left: 15,top: 20),
+    const EdgeInsets.only(left: 10),
       child: Text(
         title,
         style: TextStyle(
-            color: TColor.primary,
-            fontSize: 12,
+            color: TColor.primaryTextTitleColor,
+            fontSize: 16,
             fontWeight: FontWeight.w800
         ),
       ),
