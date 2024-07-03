@@ -19,7 +19,7 @@ class _SearchViewState extends State<SearchView> {
       appBar: AppBar(
       titleSpacing: 0.0,
       leadingWidth: 70,
-      backgroundColor: TColor.primary20,
+      backgroundColor: TColor.primary30,
       elevation: 0,
       leading: Container(
         margin: const EdgeInsets.only(left: 10),
@@ -36,7 +36,7 @@ class _SearchViewState extends State<SearchView> {
         child: Text(
           "Tìm kiếm",
           style: TextStyle(
-              color: TColor.primary,
+              color: TColor.primaryTextM,
               fontSize: 27,
               fontWeight: FontWeight.w700
           ),
@@ -48,7 +48,7 @@ class _SearchViewState extends State<SearchView> {
           decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  TColor.primary20,
+                  TColor.primary30,
                   Colors.transparent,
                   Colors.transparent,
                 ],

@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:mmusic/common/color_extension.dart';
+import 'package:get/get.dart';
+import 'package:mmusic/common_widget/your_folder_cell.dart';
 import 'package:mmusic/common_widget/title_selection_color.dart';
+import 'package:mmusic/view_model/home_view_model.dart';
 
 class YourFolderView extends StatefulWidget {
   const YourFolderView({super.key});
-
   @override
-  State<YourFolderView> createState() => _YourFolderViewState();
+  State<YourFolderView> createState() => _YourFolderState();
 }
 
-class _YourFolderViewState extends State<YourFolderView> {
+class _YourFolderState extends State<YourFolderView> {
+  final homeVM = Get.put(HomeViewModel());
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -44,7 +47,7 @@ class _YourFolderViewState extends State<YourFolderView> {
                     child: Text(
                       "Thêm danh sách phát",
                       style: TextStyle(
-                          color: TColor.primary,
+                          color: TColor.primaryText,
                           fontSize: 20,
                           fontWeight: FontWeight.w600),
                     ),
@@ -85,7 +88,7 @@ class _YourFolderViewState extends State<YourFolderView> {
                 Container(
                   margin: const EdgeInsets.only(left: 10),
                   child: Text(
-                    "Bài hát của bạn ",
+                    "Bài hát bạn yêu thích",
                     style: TextStyle(
                         color: TColor.primary,
                         fontSize: 20,

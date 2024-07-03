@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mmusic/common/color_extension.dart';
+import 'package:mmusic/view/register/register_view.dart';
+import 'package:mmusic/view/search/search_view.dart';
 import 'package:mmusic/view/splash_view.dart';
+import 'package:mmusic/view/login/login_view.dart';
 
 void main() {
   runApp(const MyApp());
