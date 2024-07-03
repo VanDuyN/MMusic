@@ -6,6 +6,7 @@ import 'package:mmusic/view/splash_view.dart';
 void main() {
   runApp(const MyApp());
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
@@ -17,16 +18,13 @@ class MyApp extends StatelessWidget {
         fontFamily: "Roboto",
         scaffoldBackgroundColor: TColor.bg,
         textTheme: Theme.of(context).textTheme.apply(
-          bodyColor: TColor.primaryText,
-          displayColor: TColor.primaryText,
-        ),
-        colorScheme: ColorScheme.fromSeed(
-            seedColor: TColor.primary),
+              bodyColor: TColor.primaryText,
+              displayColor: TColor.primaryText,
+            ),
+        colorScheme: ColorScheme.fromSeed(seedColor: TColor.primary),
         useMaterial3: false,
-
       ),
       home: const SplashView(),
     );
   }
 }
-
