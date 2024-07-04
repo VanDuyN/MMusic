@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mmusic/common/color_extension.dart';
 import 'package:mmusic/view/register/register_view.dart';
 class LoginView extends StatefulWidget {
@@ -48,20 +49,24 @@ class _LoginViewState extends State<LoginView> {
                         Container(
                           height: 25,
                           width: 20,
-                          margin:  EdgeInsets.all(2),
+                          margin:  const EdgeInsets.all(2),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.0),
-                            boxShadow: [
+                            boxShadow: const [
                               BoxShadow(
-                                color: TColor.primary.withOpacity(0.1),
                                 spreadRadius: 1,
                                 blurRadius: 8,
-                                offset: const Offset(0, 1),
+                                offset: Offset(0, 1),
                               ),
                             ],
                           ),
                           child: Checkbox(
-                            checkColor: TColor.primary.withOpacity(0.7),
+                            fillColor: WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
+                              if (states.contains(WidgetState.selected)) {
+                                return TColor.primary; // Màu của checkbox khi được chọn
+                              }
+                              return TColor.primary.withOpacity(0.7); // Màu của checkbox khi không được chọn
+                            }),
                             value: isChecked,
                             onChanged: (bool? value) {
                               setState(() {
@@ -144,10 +149,7 @@ class _LoginViewState extends State<LoginView> {
                           ),
                           child: GestureDetector(
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const RegisterView()),
-                              );
+                              Get.off(const RegisterView());
                             },
                             child: Text(
                               " Đăng ký ngay",
@@ -182,6 +184,8 @@ class _LoginViewState extends State<LoginView> {
           labelText: labelText,
           labelStyle: TextStyle(color: TColor.unfocused),
           icon: Icon(icon, color: TColor.lightGray.withOpacity(0.5)),
+          errorStyle: TextStyle(color: TColor.primaryTopIcon, fontSize: 12), // Tùy chỉnh style của error text
+          errorBorder: InputBorder.none,// Tùy chỉnh style của error border
         ),
         validator: (value) {
           if (value == null || value.isEmpty) {
@@ -209,6 +213,8 @@ class _LoginViewState extends State<LoginView> {
           labelText: labelText,
           labelStyle: TextStyle(color: TColor.unfocused),
           icon: Icon(icon, color: TColor.lightGray.withOpacity(0.5)),
+          errorStyle: TextStyle(color: TColor.primaryTopIcon, fontSize: 12), // Tùy chỉnh style của error text
+          errorBorder: InputBorder.none,// Tùy chỉnh style của error border
           suffixIcon: IconButton(
             icon: Icon(
               obscureText ? Icons.visibility : Icons.visibility_off,

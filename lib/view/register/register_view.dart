@@ -141,7 +141,7 @@ class _RegisterViewState extends State<RegisterView> {
           labelText: labelText,
           labelStyle: TextStyle(color: TColor.unfocused),
           icon: Icon(icon, color: TColor.lightGray.withOpacity(0.5)),
-          errorStyle: TextStyle(color: Color(0xfff64040).withOpacity(0.3), fontSize: 12), // Tùy chỉnh style của error text
+          errorStyle: TextStyle(color: TColor.primaryTopIcon, fontSize: 12), // Tùy chỉnh style của error text
           errorBorder: InputBorder.none,// Tùy chỉnh style của error border
         ),
         validator: (value) {
@@ -170,6 +170,8 @@ class _RegisterViewState extends State<RegisterView> {
           labelText: labelText,
           labelStyle: TextStyle(color: TColor.unfocused),
           icon: Icon(icon, color: TColor.lightGray.withOpacity(0.5)),
+          errorStyle: TextStyle(color: TColor.primaryTopIcon, fontSize: 12), // Tùy chỉnh style của error text
+          errorBorder: InputBorder.none,// Tùy chỉnh style của error border
           suffixIcon: IconButton(
             icon: Icon(
               obscureText ? Icons.visibility : Icons.visibility_off,

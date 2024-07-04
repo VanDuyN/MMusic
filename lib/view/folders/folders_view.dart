@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mmusic/common/color_extension.dart';
+import 'package:mmusic/view/folders/search_folders_view.dart';
 import 'package:mmusic/view/folders/your_folder_view.dart';
 import 'package:mmusic/view/folders/your_library_view.dart';
 import 'package:mmusic/view/folders/your_playlist_view.dart';
@@ -59,7 +61,9 @@ class _FoldersViewState extends State<FoldersView> with SingleTickerProviderStat
           Container(
             margin: const EdgeInsets.only(right: 10),
             child: IconButton(
-                onPressed: (){},
+                onPressed: (){
+                  Get.off(const SearchFoldersView());
+                },
                 icon: Icon(
                   Icons.search,
                   size: 30,

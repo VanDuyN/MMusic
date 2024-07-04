@@ -6,6 +6,8 @@ import 'package:mmusic/common_widget/for_you_cell.dart';
 import 'package:mmusic/common_widget/recently_cell.dart';
 import 'package:mmusic/common_widget/title_selection.dart';
 import 'package:mmusic/common_widget/continue_cell.dart';
+import 'package:mmusic/view/login/login_view.dart';
+import 'package:mmusic/view/notifications/notification_view.dart';
 import 'package:mmusic/view_model/home_view_model.dart';
 import 'package:mmusic/view_model/splash_view_model.dart';
 class HomeView extends StatefulWidget {
@@ -166,7 +168,7 @@ class _HomeViewState extends State<HomeView> {
                 ),
               ),
               onTap: (){
-                splashVM.closeDrawer();
+                Get.off(const LoginView());
               },
             ),
             Divider(
@@ -228,7 +230,9 @@ class _HomeViewState extends State<HomeView> {
                       fit: BoxFit.contain,)
           ),
           IconButton(
-              onPressed: (){},
+              onPressed: (){
+                Get.off(const NotificationView());
+              },
               icon: Image.asset(
                 'assets/img/bell_tab.png',
                 width: 25,
