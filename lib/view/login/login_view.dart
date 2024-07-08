@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:mmusic/api/api.dart';
 import 'package:mmusic/common/color_extension.dart';
@@ -19,11 +21,14 @@ class _LoginViewState extends State<LoginView> {
   bool _isObscurePassword = true;
   bool isChecked = false;
   late SharedPreferences prefs;
+
+
   final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    initSharedPref();
   }
   void initSharedPref() async{
     prefs = await SharedPreferences.getInstance();
@@ -124,8 +129,11 @@ class _LoginViewState extends State<LoginView> {
                         onPressed: () async {
                           if (_formKey.currentState?.validate() ?? false) {
                             // Xử lý khi form hợp lệ và button được nhấn
-                            await API().login(_emailController.text, _passwordController.text)
-                                ? Get.offAll(()=>MainTabview(songHandler: widget.songHandler,),)
+                            var jsonResponse= jsonDecode(await API().login(_emailController.text, _passwordController.text));
+                            var myToken = jsonResponse['token'];
+                            prefs.setString('token', myToken);
+                            jsonResponse['status'] ?
+                            Get.offAll(()=>MainTabview(songHandler: widget.songHandler,),)
                                 :ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Center(
