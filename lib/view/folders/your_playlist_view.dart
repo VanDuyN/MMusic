@@ -4,6 +4,7 @@ import 'package:mmusic/common/color_extension.dart';
 import 'package:mmusic/common_widget/title_selection_color.dart';
 import 'package:mmusic/common_widget/your_playlist_cell.dart';
 import 'package:mmusic/view_model/home_view_model.dart';
+
 class YourPlaylistView extends StatefulWidget {
   const YourPlaylistView({super.key});
 
@@ -17,13 +18,13 @@ class _PlaylistViewState extends State<YourPlaylistView> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        margin: const EdgeInsets.only(left: 20,right: 10),
+        margin: const EdgeInsets.only(left: 20, right: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
-              padding: const EdgeInsets.only(top: 10,bottom: 10),
+              padding: const EdgeInsets.only(top: 10, bottom: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -38,10 +39,9 @@ class _PlaylistViewState extends State<YourPlaylistView> {
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                         ),
-                        borderRadius: BorderRadius.circular(25)
-                    ),
+                        borderRadius: BorderRadius.circular(25)),
                     child: IconButton(
-                      onPressed: (){},
+                      onPressed: () {},
                       splashRadius: 26,
                       icon: Icon(
                         Icons.add,
@@ -57,8 +57,7 @@ class _PlaylistViewState extends State<YourPlaylistView> {
                       style: TextStyle(
                           color: TColor.primaryText,
                           fontSize: 20,
-                          fontWeight: FontWeight.w600
-                      ),
+                          fontWeight: FontWeight.w600),
                     ),
                   )
                 ],
@@ -78,18 +77,16 @@ class _PlaylistViewState extends State<YourPlaylistView> {
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                         ),
-                        borderRadius: BorderRadius.circular(25)
-                    ),
+                        borderRadius: BorderRadius.circular(25)),
                     child: IconButton(
-                        onPressed: (){},
+                        onPressed: () {},
                         color: TColor.darkGray,
                         splashRadius: 26,
                         icon: Icon(
                           Icons.favorite_border,
                           size: 24,
                           color: TColor.bg,
-                        )
-                    ),
+                        )),
                   ),
                   Container(
                     margin: const EdgeInsets.only(left: 10),
@@ -98,15 +95,14 @@ class _PlaylistViewState extends State<YourPlaylistView> {
                       style: TextStyle(
                           color: TColor.primaryText,
                           fontSize: 20,
-                          fontWeight: FontWeight.w600
-                      ),
+                          fontWeight: FontWeight.w600),
                     ),
                   ),
                 ],
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(top:20),
+              margin: const EdgeInsets.only(top: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -114,7 +110,8 @@ class _PlaylistViewState extends State<YourPlaylistView> {
                   Image.asset(
                     "assets/img/sort.png",
                     width: 17,
-                    height: 13,),
+                    height: 13,
+                  ),
                   const TitleSelectionColor(title: "Danh sách phát gần đây")
                 ],
               ),
@@ -123,12 +120,14 @@ class _PlaylistViewState extends State<YourPlaylistView> {
               child: ListView.builder(
                 shrinkWrap: true,
                 primary: false,
-                padding: const EdgeInsets.symmetric(vertical:8),
+                padding: const EdgeInsets.symmetric(vertical: 8),
                 scrollDirection: Axis.vertical,
-                itemCount: 4,
-                itemBuilder: (context,index){
+                itemCount: homeVM.playListArr.length,
+                itemBuilder: (context, index) {
                   var mOBJ = homeVM.playListArr[index];
-                  return YourPlaylistCell(mObj: mOBJ,);
+                  return YourPlaylistCell(
+                    mObj: mOBJ,
+                  );
                 },
               ),
             ),
