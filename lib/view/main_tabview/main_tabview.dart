@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:mmusic/common/color_extension.dart';
+import 'package:mmusic/components/player_deck.dart';
+import 'package:mmusic/services/song_handler.dart';
 import 'package:mmusic/view/folders/folders_view.dart';
 import 'package:mmusic/view/home/home_view.dart';
 import 'package:mmusic/view/search/search_view.dart';
-
+import 'package:scroll_to_index/scroll_to_index.dart';
 class MainTabview extends StatefulWidget{
-  const MainTabview({super.key});
+  final SongHandler songHandler ;
+  const MainTabview({super.key, required this.songHandler});
   @override
   State<MainTabview> createState() => _MainTabViewState();
 }
 class _MainTabViewState extends State<MainTabview> with SingleTickerProviderStateMixin{
   TabController? controller;
   int selectTab = 0;
+  final AutoScrollController _autoScrollController = AutoScrollController();
+  void _scrollTo(int index) {
+    _autoScrollController.scrollToIndex(
+      index,
+      preferPosition: AutoScrollPosition.middle,
+      duration: const Duration(milliseconds: 800),
+    );
+  }
   @override
   void initState() {
     super.initState();
@@ -28,16 +39,22 @@ class _MainTabViewState extends State<MainTabview> with SingleTickerProviderStat
     super.dispose();
     controller?.dispose();
   }
+
   @override
   Widget build(BuildContext context){
-
     return Scaffold(
-      body: TabBarView(controller: controller,children: const [
-        HomeView(),
-        SearchView(),
-        FoldersView(),
-      ],
+      body: Stack(
+        children: [
+          TabBarView(controller: controller,children: [
+            HomeView(songHandler: widget.songHandler,),
+            const SearchView(),
+            FoldersView(songHandler: widget.songHandler,),
+          ],
+          ),
+
+        ],
       ),
+
       bottomNavigationBar: Container(
         decoration:BoxDecoration(
             color: TColor.bg,
@@ -96,4 +113,5 @@ class _MainTabViewState extends State<MainTabview> with SingleTickerProviderStat
       ),
     );
   }
+
 }

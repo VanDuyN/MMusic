@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:mmusic/common/color_extension.dart';
 class CategoryCell extends StatelessWidget {
