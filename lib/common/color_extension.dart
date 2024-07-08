@@ -5,6 +5,8 @@ class TColor{
   static Color get primary30 => primary.withOpacity(0.3);
   static Color get primary40 => primary.withOpacity(0.4);
 
+  static Color get primaryLine  => const Color(0xff76D7E6);
+
   static Color get focus => const Color(0xffD9519D);
   static Color get unfocused => const Color(0xff63666E);
   static Color get focusStart => const Color(0xffC35BD1);

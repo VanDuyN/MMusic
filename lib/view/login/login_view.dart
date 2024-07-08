@@ -1,16 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:mmusic/api/api.dart';
 import 'package:mmusic/common/color_extension.dart';
+import 'package:get/get.dart';
+import 'package:mmusic/services/song_handler.dart';
+import 'package:mmusic/view/main_tabview/main_tabview.dart';
 import 'package:mmusic/view/register/register_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 class LoginView extends StatefulWidget {
-  const LoginView({super.key});
+  final SongHandler songHandler;
+  const LoginView({super.key, required this.songHandler});
   @override
   State<LoginView> createState() => _LoginViewState();
 }
 
 class _LoginViewState extends State<LoginView> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
   bool _isObscurePassword = true;
   bool isChecked = false;
+  late SharedPreferences prefs;
   final _formKey = GlobalKey<FormState>();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+  void initSharedPref() async{
+    prefs = await SharedPreferences.getInstance();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +42,7 @@ class _LoginViewState extends State<LoginView> {
               height: 215,
               width: 275,
               child: Image.asset(
-                "assets/img/logo.png",
+                "assets/img/logo_app.png",
                 fit: BoxFit.cover,
               ),
             ),
@@ -40,15 +57,15 @@ class _LoginViewState extends State<LoginView> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    _buildTextField("Email", Icons.email_outlined),
+                    _buildTextField("Email", Icons.email_outlined,_emailController),
                     const SizedBox(height: 16),
-                    _buildPasswordTextField("Mật khẩu", _isObscurePassword, Icons.lock_outline),
+                    _buildPasswordTextField("Mật khẩu", _isObscurePassword, Icons.lock_outline,_passwordController),
                     Row(
                       children: [
                         Container(
                           height: 25,
                           width: 20,
-                          margin:  EdgeInsets.all(2),
+                          margin: const EdgeInsets.all(2),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.0),
                             boxShadow: [
@@ -104,9 +121,27 @@ class _LoginViewState extends State<LoginView> {
                         ],
                       ),
                       child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (_formKey.currentState?.validate() ?? false) {
                             // Xử lý khi form hợp lệ và button được nhấn
+                            await API().login(_emailController.text, _passwordController.text)
+                                ? Get.offAll(()=>MainTabview(songHandler: widget.songHandler,),)
+                                :ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Center(
+                                    child: Text('Email đã tồn tại', style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        color: TColor.primaryText,
+                                        fontSize: 20
+                                    ),),
+                                  ),
+                                  duration: const Duration(seconds: 2),
+                                  behavior: SnackBarBehavior.floating,
+                                  backgroundColor: TColor.primary,
+                                  padding:const EdgeInsets.all(20),
+                                  margin:const EdgeInsets.only(bottom: 400,left: 20,right: 20),
+                                ),
+                            );
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -144,10 +179,7 @@ class _LoginViewState extends State<LoginView> {
                           ),
                           child: GestureDetector(
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const RegisterView()),
-                              );
+                              Get.off(()=> RegisterView(songHandler: widget.songHandler,));
                             },
                             child: Text(
                               " Đăng ký ngay",
@@ -167,7 +199,7 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
-  Widget _buildTextField(String labelText, IconData icon) {
+  Widget _buildTextField(String labelText, IconData icon,TextEditingController controller) {
     return Container(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
       decoration: BoxDecoration(
@@ -176,6 +208,7 @@ class _LoginViewState extends State<LoginView> {
         border: Border.all(color: TColor.darkGray),
       ),
       child: TextFormField(
+        controller: controller,
         decoration: InputDecoration(
           focusedBorder: InputBorder.none,
           enabledBorder: InputBorder.none,
@@ -193,7 +226,7 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
-  Widget _buildPasswordTextField(String labelText, bool obscureText, IconData icon) {
+  Widget _buildPasswordTextField(String labelText, bool obscureText, IconData icon,TextEditingController controller) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
@@ -203,6 +236,7 @@ class _LoginViewState extends State<LoginView> {
       ),
       child: TextFormField(
         obscureText: obscureText,
+        controller: controller,
         decoration: InputDecoration(
           focusedBorder: InputBorder.none,
           enabledBorder: InputBorder.none,
