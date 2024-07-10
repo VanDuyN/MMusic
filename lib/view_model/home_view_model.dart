@@ -53,7 +53,8 @@ class HomeViewModel extends GetxController{
     {
       "image":"assets/img/img_13.png",
       "name":"em của ngày hôm qua",
-      "artist":"Sơn tùng MTP"
+      "artist":"Sơn tùng MTP",
+      "music": "assets/music/emcuangayhomua.mp3"
     },{
       "image":"assets/img/img_14.png",
       "name":"Khi người mình yêu khóc",
@@ -115,8 +116,24 @@ class HomeViewModel extends GetxController{
     },
   ].obs;
   //đề xuất
-  final playListArr = [
-
+  final yourPlayListArr = [
+    {
+      "image":"assets/img/img_1.png",
+      "name":"Chill",
+      "number":"11"
+    },{
+      "image":"assets/img/img_1.png",
+      "name":"Bay",
+      "number":"8"
+    },{
+      "image":"assets/img/img_1.png",
+      "name":"Nhạc trẻ",
+      "number":"14"
+    },{
+      "image":"assets/img/img_1.png",
+      "name":"Dễ ngủ",
+      "number":"10"
+    },
   ].obs;
   final  categoryListArr =[
     {

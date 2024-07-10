@@ -1,24 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mmusic/common/color_extension.dart';
 import 'package:mmusic/common_widget/artist_cell.dart';
+import 'package:mmusic/common_widget/continue_cell.dart';
 import 'package:mmusic/common_widget/for_you_cell.dart';
 import 'package:mmusic/common_widget/recently_cell.dart';
 import 'package:mmusic/common_widget/title_selection.dart';
-import 'package:mmusic/common_widget/continue_cell.dart';
+import 'package:mmusic/components/player_deck.dart';
+import 'package:mmusic/notifiers/song_provider.dart';
+import 'package:mmusic/services/song_handler.dart';
 import 'package:mmusic/view/login/login_view.dart';
-import 'package:mmusic/view/notifications/notification_view.dart';
 import 'package:mmusic/view_model/home_view_model.dart';
 import 'package:mmusic/view_model/splash_view_model.dart';
+import 'package:provider/provider.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  final SongHandler songHandler;
+  const HomeView({super.key, required this.songHandler});
   @override
   State<HomeView> createState() => _HomeViewState();
 }
 
 class _HomeViewState extends State<HomeView> {
+  final AutoScrollController _autoScrollController = AutoScrollController();
+  void _scrollTo(int index) {
+    _autoScrollController.scrollToIndex(
+      index,
+      preferPosition: AutoScrollPosition.middle,
+      duration: const Duration(milliseconds: 800),
+    );
+  }
   final homeVM = Get.put(HomeViewModel());
-
   @override
   Widget build(BuildContext context) {
     var media = MediaQuery.sizeOf(context);
@@ -31,18 +44,18 @@ class _HomeViewState extends State<HomeView> {
           padding: EdgeInsets.zero,
           children: [
             SizedBox(
-              height: 220,
+              height: 260,
               child: DrawerHeader(
                 decoration: BoxDecoration(
-                  color: TColor.primaryText.withOpacity(0.03),
+                  color: TColor.primaryText.withOpacity(0.07),
                 ),
                 child: Column(
                 children: [
                   Image.asset(
-                    "assets/img/logo.png",
+                    "assets/img/logo_app.png",
                     width: media.width*0.35,
                   ),
-                  const SizedBox(height: 20,),
+                  const SizedBox(height: 10,),
                   const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children:[
@@ -106,7 +119,7 @@ class _HomeViewState extends State<HomeView> {
               },
             ),
             Divider(
-              color: TColor.primaryText.withOpacity(0.07),
+              color: TColor.primary.withOpacity(0.3),
               indent: 70,
             ),
             ListTile(
@@ -128,7 +141,7 @@ class _HomeViewState extends State<HomeView> {
               },
             ),
             Divider(
-              color: TColor.primaryText.withOpacity(0.07),
+              color: TColor.primary.withOpacity(0.3),
               indent: 70,
             ),
             ListTile(
@@ -150,7 +163,7 @@ class _HomeViewState extends State<HomeView> {
               },
             ),
             Divider(
-              color: TColor.primaryText.withOpacity(0.07),
+              color: TColor.primary.withOpacity(0.3),
               indent: 70,
             ),
             ListTile(
@@ -168,11 +181,13 @@ class _HomeViewState extends State<HomeView> {
                 ),
               ),
               onTap: (){
-                Get.off(const LoginView());
+                  Get.to(()=> LoginView(songHandler: widget.songHandler,));
+                splashVM.closeDrawer();
+
               },
             ),
             Divider(
-              color: TColor.primaryText.withOpacity(0.07),
+              color: TColor.primaryText.withOpacity(0.3),
               indent: 70,
             ),
           ],
@@ -230,9 +245,7 @@ class _HomeViewState extends State<HomeView> {
                       fit: BoxFit.contain,)
           ),
           IconButton(
-              onPressed: (){
-                Get.off(const NotificationView());
-              },
+              onPressed: (){},
               icon: Image.asset(
                 'assets/img/bell_tab.png',
                 width: 25,
@@ -261,69 +274,121 @@ class _HomeViewState extends State<HomeView> {
             end: Alignment.bottomCenter,
           )
         ),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const TitleSelection(title: "Tiếp tục nghe"),
-              SizedBox(
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  primary: false,
-                  padding: const EdgeInsets.only(left: 15, right: 5),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 3,
-                    mainAxisSpacing: 3,
-                    mainAxisExtent: 83,),
-                  itemCount: 6,
-                  itemBuilder: (context,index){
-                    var mOBJ = homeVM.continueListeningArr[index];
-                    return ContinueCell(mObj: mOBJ,);
-                  },
-                ),
-              ),
-              const TitleSelection(title: "Nghe gần đây"),
-              SizedBox(
-                height: 162,
-                child: ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal:8),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 6,
-                  itemBuilder: (context,index){
-                    var mOBJ = homeVM.recentlyListArr[index];
-                    return ForYouCell(mObj: mOBJ,);
-                  },
-                ),
-              ),
-              const TitleSelection(title: "Dành cho bạn"),
-              SizedBox(
-                height: 230,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 6,
-                  itemBuilder: (context,index){
-                    var mOBJ = homeVM.forYouListArr[index];
-                    return RecentlyCell(mObj: mOBJ,);
-                  },
-                ),
-              ),
-              const TitleSelection(title: "Nghệ sĩ"),
-              SizedBox(
-                height: 220,
-                child: ListView.builder(
-                  padding:const EdgeInsets.only(left: 20),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 6,
-                  itemBuilder: (context,index){
-                    var mOBJ = homeVM.artistListArr[index];
-                    return ArtistCell(mObj: mOBJ,);
-                  },
-                ),
-              ),
-            ],),
+        child:Stack(
+          children: [
+
+            SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const TitleSelection(title: "Tiếp tục nghe"),
+                  SizedBox(
+                    child: GridView.builder(
+                      shrinkWrap: true,
+                      primary: false,
+                      padding: const EdgeInsets.only(left: 15, right: 5),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 3,
+                        mainAxisSpacing: 3,
+                        mainAxisExtent: 83,),
+                      itemCount: 6,
+                      itemBuilder: (context,index){
+                        var mOBJ = homeVM.continueListeningArr[index];
+                        return ContinueCell(mObj: mOBJ,);
+                      },
+                    ),
+                  ),
+                  const TitleSelection(title: "Nghe gần đây"),
+                  SizedBox(
+                    height: 162,
+                    child: ListView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal:8),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 6,
+                      itemBuilder: (context,index){
+                        var mOBJ = homeVM.recentlyListArr[index];
+                        return RecentlyCell(mObj: mOBJ,);
+                      },
+                    ),
+                  ),
+                  const TitleSelection(title: "Dành cho bạn"),
+                  Consumer<SongsProvider>(
+                    builder: (context, songsProvider,child) {
+                    return  songsProvider.isLoading
+                        ? _buildLoadingIndicator() // Display a loading indicator while songs are loading
+                        : _buildSongsList(songsProvider);
+                    },
+                  ),
+                  SizedBox(
+                    height: 230,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 6,
+                      itemBuilder: (context,index){
+                        var mOBJ = homeVM.forYouListArr[index];
+                        return ForYouCell(mObj: mOBJ,);
+                      },
+                    ),
+                  ),
+                  const TitleSelection(title: "Nghệ sĩ"),
+                  SizedBox(
+                    height: 220,
+                    child: ListView.builder(
+                      padding:const EdgeInsets.only(left: 20),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 6,
+                      itemBuilder: (context,index){
+                        var mOBJ = homeVM.artistListArr[index];
+                        return ArtistCell(mObj: mOBJ,);
+                      },
+                    ),
+                  ),
+                  PlayerDeck(
+                    songHandler: widget.songHandler,
+                    isLast: true,
+                    onTap: () {},
+                  ),
+                ],),
+            ),
+            _buildPlayerDeck(),
+          ],
         ),
       )
     );
   }
+  Widget _buildLoadingIndicator(){
+    return const Center(
+      child: CircularProgressIndicator(
+        strokeCap: StrokeCap.round,
+      ),
+    );
+  }
+  Widget _buildSongsList(SongsProvider songsProvider) {
+    return Stack(
+      children: [
+        // SongsList widget to display the list of songs
+        // ForYouList(
+        //   songHandler: widget.songHandler,
+        //   songs: songsProvider.songs,
+        //   autoScrollController: _autoScrollController,
+        // ),
+        //_buildPlayerDeck(), // PlayerDeck widget for music playback controls
+      ],
+    );
+  }
+  Widget _buildPlayerDeck() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        // PlayerDeck widget with controls and the ability to scroll to a specific song
+        PlayerDeck(
+          songHandler: widget.songHandler,
+          isLast: false,
+          onTap: _scrollTo,
+        ),
+      ],
+    );
+  }
+
 }

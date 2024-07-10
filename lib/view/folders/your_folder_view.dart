@@ -3,9 +3,13 @@ import 'package:mmusic/common/color_extension.dart';
 import 'package:get/get.dart';
 import 'package:mmusic/common_widget/your_folder_cell.dart';
 import 'package:mmusic/common_widget/title_selection_color.dart';
+import 'package:mmusic/components/player_deck.dart';
+import 'package:mmusic/services/song_handler.dart';
+import 'package:mmusic/view/folders/is_folder_view.dart';
 import 'package:mmusic/view_model/home_view_model.dart';
 class YourFolderView extends StatefulWidget {
-  const YourFolderView({super.key});
+  final SongHandler songHandler;
+  const YourFolderView({super.key, required this.songHandler});
   @override
   State<YourFolderView> createState() => _YourFolderState();
 }
@@ -169,7 +173,50 @@ class _YourFolderState extends State<YourFolderView> {
                   ),
                 ],
               ),
-            ),          ],
+            ),
+            InkWell(
+              onTap: (){
+                Get.to(()=> IsFolderView(songHandler: widget.songHandler));
+              },
+              child:Container(
+              margin: const EdgeInsets.only(top: 15),
+              child: Row(
+                children:[
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(5),
+                    child: Image.asset(
+                      "assets/img/folder.png",
+                      width: 84,
+                      height: 82,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                   Container(
+                      margin: const EdgeInsets.only(left: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Có trong máy của bạn",
+                            style: TextStyle(
+                                color: TColor.primaryText,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
+              ),),
+            ),
+            PlayerDeck(
+              songHandler:widget.songHandler,
+              isLast: true,
+              onTap: () {},
+            ),
+          ],
         ),
       ),
     );

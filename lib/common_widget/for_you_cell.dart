@@ -1,38 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mmusic/common/color_extension.dart';
-import 'dart:math';
+import 'package:mmusic/view/play_list/play_list_view.dart';
+
 class ForYouCell extends StatelessWidget {
+
   final Map mObj;
   const ForYouCell({super.key, required this.mObj});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 150,
-      height: 150,
-      margin: const EdgeInsets.only(left: 10, top: 5, right: 20),
-      padding: const EdgeInsets.only(bottom: 5),
-      decoration: BoxDecoration(
-        color: Colors.primaries[Random().nextInt(Colors.primaries.length)],
-        image: DecorationImage(
-            fit: BoxFit.fitWidth,
-            alignment: AlignmentDirectional.topStart,
-            image: AssetImage(
-              mObj["image"],
-            ),
-        ),
-      ),
+    return InkWell(
+      // onTap: (){
+      //   Get.to(()=> const PlayListView());
+      // },
       child: Container(
-        padding: const EdgeInsets.only(top: 10,left: 25),
+        width: 182,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(9),
+        ),
+        margin: const EdgeInsets.only(left: 15,top:5, right: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              mObj["name"],
-              style: TextStyle(
-                  color: TColor.primaryText80,
-                  fontSize: 17,
-                  fontWeight: FontWeight.w700
+            ClipRRect(
+              borderRadius: BorderRadius.circular(9),
+              child: Image.asset(
+                mObj["image"],
+                width: 182,
+                height: 182,
+                fit: BoxFit.fill,
+              ),
+            ),
+              Container(
+                margin: const EdgeInsets.only(top: 8),
+                padding: const EdgeInsets.only(left: 10,right: 1),
+                child: Text(
+                  mObj["name"],
+                  style: TextStyle(
+                    color: TColor.primaryText80,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            Container(
+              margin: const EdgeInsets.only(top: 2),
+              padding: const EdgeInsets.only(left: 10,right: 1),
+              child: Text(
+                mObj["artist"],
+                style: TextStyle(
+                  color: TColor.primaryText35,
+                  fontSize: 10,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ],

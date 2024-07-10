@@ -6,7 +6,6 @@ import 'package:mmusic/common_widget/title_selection.dart';
 import 'package:mmusic/view_model/home_view_model.dart';
 class SearchView extends StatefulWidget {
   const SearchView({super.key});
-
   @override
   State<SearchView> createState() => _SearchViewState();
 }
@@ -24,7 +23,7 @@ class _SearchViewState extends State<SearchView> {
       leading: Container(
         margin: const EdgeInsets.only(left: 10),
         child: Image.asset(
-          'assets/img/logo.png',
+          'assets/img/logo_app.png',
           width: 50,
           height: 50,
           fit: BoxFit.contain,

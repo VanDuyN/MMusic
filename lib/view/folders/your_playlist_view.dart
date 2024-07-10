@@ -129,7 +129,7 @@ class _PlaylistViewState extends State<YourPlaylistView> {
                 scrollDirection: Axis.vertical,
                 itemCount: 4,
                 itemBuilder: (context,index){
-                  var mOBJ = homeVM.playListArr[index];
+                  var mOBJ = homeVM.yourPlayListArr[index];
                   return YourPlaylistCell(mObj: mOBJ,);
                 },
               ),

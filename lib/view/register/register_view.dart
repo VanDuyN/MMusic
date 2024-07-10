@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:mmusic/api/api.dart';
 import 'package:mmusic/common/color_extension.dart';
+import 'package:mmusic/services/song_handler.dart';
 import 'package:mmusic/view/login/login_view.dart';
+import 'package:get/get.dart';
 
 class RegisterView extends StatefulWidget {
-  const RegisterView({super.key});
+  final SongHandler songHandler;
+  const RegisterView({super.key, required this.songHandler});
 
   @override
   State<RegisterView> createState() => _RegisterViewState();
 }
 
 class _RegisterViewState extends State<RegisterView> {
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController= TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   bool _isObscurePassword = true;
   bool _isObscureConfirmPassword = true;
   final _formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +34,7 @@ class _RegisterViewState extends State<RegisterView> {
               height: 215,
               width: 275,
               child: Image.asset(
-                "assets/img/logo.png",
+                "assets/img/logo_app.png",
                 fit: BoxFit.cover,
               ),
             ),
@@ -42,13 +49,13 @@ class _RegisterViewState extends State<RegisterView> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    _buildTextField("Họ và tên", Icons.person_outline),
+                    _buildTextField("Họ và tên", Icons.person_outline,_nameController),
                     const SizedBox(height: 16),
-                    _buildTextField("Email", Icons.email_outlined),
+                    _buildTextField("Email", Icons.email_outlined,_emailController),
                     const SizedBox(height: 16),
-                    _buildPasswordTextField("Mật khẩu", _isObscurePassword, Icons.lock_outline),
+                    _buildPasswordTextField("Mật khẩu", _isObscurePassword, Icons.lock_outline,_passwordController),
                     const SizedBox(height: 16),
-                    _buildPasswordTextField("Xác nhận mật khẩu", _isObscureConfirmPassword, Icons.key_outlined),
+                    _buildPasswordTextField("Xác nhận mật khẩu", _isObscureConfirmPassword, Icons.key_outlined,_confirmPasswordController),
                     Container(
                       margin: const EdgeInsets.fromLTRB(0,20,0,5),
                       decoration: BoxDecoration(
@@ -67,9 +74,30 @@ class _RegisterViewState extends State<RegisterView> {
                         ],
                       ),
                       child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (_formKey.currentState?.validate() ?? false) {
-                            // Xử lý khi form hợp lệ và button được nhấn
+                             await API().register(
+                                _emailController.text,
+                                _passwordController.text,
+                                _nameController.text)
+                                ? Get.off(()=>  LoginView(songHandler: widget.songHandler,))
+                                : ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Center(
+                                      child: Text('Email đã tồn tại', style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        color: TColor.primaryText,
+                                        fontSize: 20
+                                      ),),
+                                    ),
+                                    duration: const Duration(seconds: 2),
+                                    behavior: SnackBarBehavior.floating,
+                                    backgroundColor: TColor.primary,
+                                    padding:const EdgeInsets.all(20),
+                                    margin:const EdgeInsets.only(bottom: 400,left: 20,right: 20),
+                               ),
+                             );
+
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -106,10 +134,7 @@ class _RegisterViewState extends State<RegisterView> {
                           ),
                           child: GestureDetector(
                             onTap:(){
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const LoginView()),
-                              );
+                              Get.off(()=> LoginView(songHandler: widget.songHandler,));
                             },
                             child: Text(" Đăng nhập ngay",style: TextStyle(color:TColor.primary ),),
                           ),
@@ -125,8 +150,7 @@ class _RegisterViewState extends State<RegisterView> {
       ),
     );
   }
-
-  Widget _buildTextField(String labelText, IconData icon) {
+  Widget _buildTextField(String labelText, IconData icon,TextEditingController controller) {
     return Container(
       padding: const EdgeInsets.fromLTRB(10,0,10,0),
       decoration: BoxDecoration(
@@ -135,6 +159,7 @@ class _RegisterViewState extends State<RegisterView> {
         border: Border.all(color: TColor.darkGray),
       ),
       child: TextFormField(
+        controller: controller,
         decoration: InputDecoration(
           focusedBorder: InputBorder.none,
           enabledBorder: InputBorder.none,
@@ -154,7 +179,7 @@ class _RegisterViewState extends State<RegisterView> {
     );
   }
 
-  Widget _buildPasswordTextField(String labelText, bool obscureText, IconData icon) {
+  Widget _buildPasswordTextField(String labelText, bool obscureText, IconData icon,TextEditingController controller) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
@@ -163,6 +188,7 @@ class _RegisterViewState extends State<RegisterView> {
         border: Border.all(color: TColor.darkGray),
       ),
       child: TextFormField(
+        controller: controller,
         obscureText: obscureText,
         decoration: InputDecoration(
           focusedBorder: InputBorder.none,
