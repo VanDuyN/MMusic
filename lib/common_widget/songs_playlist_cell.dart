@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:mmusic/api/api.dart';
 import 'package:mmusic/common/color_extension.dart';
+import 'package:mmusic/services/song_handler.dart';
+import 'package:mmusic/view_model/song_model.dart';
 class SongsPlaylistCell extends StatelessWidget {
-  final Map mObj;
-  const SongsPlaylistCell({super.key, required this.mObj});
+  final SongModel mObj;
+  final SongHandler songHandler;
+  final bool isArtist;
+  const SongsPlaylistCell({super.key, required this.mObj, required this.songHandler, required this.isArtist});
 
   @override
   Widget build(BuildContext context) {
+    String url = API().getUrl();
     return Container(
       width: double.maxFinite,
       padding:const EdgeInsets.all(1),
@@ -16,8 +22,8 @@ class SongsPlaylistCell extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(9),
-            child: Image.asset(
-              mObj["image"],
+            child: Image.network(
+              url + mObj.image,
               width: 60,
               height: 60,
               fit: BoxFit.fill,
@@ -29,13 +35,14 @@ class SongsPlaylistCell extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(mObj["name"],
+                Text(mObj.name,
                   style: TextStyle(
                     color: TColor.primaryText,
                     fontSize: 16,
                     fontWeight: FontWeight.w700
                 ),),
-                Text(mObj["artist"],
+
+                Text(isArtist ? "" : mObj.idArtist.toString(),
                   style: TextStyle(
                     color: TColor.primaryText60,
                     fontSize: 12,

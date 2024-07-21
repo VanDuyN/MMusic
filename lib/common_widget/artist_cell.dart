@@ -1,34 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:mmusic/api/api.dart';
 import 'package:mmusic/common/color_extension.dart';
+import 'package:mmusic/services/song_handler.dart';
+import 'package:mmusic/view/list_song/list_song_artist.dart';
+import 'package:mmusic/view_model/arist_model.dart';
+import 'package:get/get.dart';
+import 'package:mmusic/view_model/home_view_model.dart';
+import 'package:mmusic/view_model/song_model.dart';
 class ArtistCell extends StatelessWidget {
-  final Map mObj;
-  const ArtistCell({super.key, required this.mObj});
+  final Artist mObj;
+  final SongHandler songHandler;
+  const ArtistCell({super.key, required this.mObj, required this.songHandler});
+  Future<void> _initSongsAndNavigate() async {
+    final List<SongModel> songs = await HomeViewModel().getSongByArtist(mObj.id);
+    songHandler.initListSongs(songs: songs);
+    Get.to(() => ListSongArtist(songHandler: songHandler,mObj: mObj,));
+  }
   @override
   Widget build(BuildContext context) {
+    final url =API().getUrl();
     return Container(
       padding: const EdgeInsets.only(right: 15),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircleAvatar(
-            radius: 80,
-            child: ClipOval(
-              child: Image.asset(
-                mObj["image"],
-                width: double.infinity,
-                height: double.infinity,
-                fit: BoxFit.cover,
+          InkWell(
+            onTap: (){
+              _initSongsAndNavigate();
+            },
+
+            child: CircleAvatar(
+              radius: 80,
+              child: ClipOval(
+                child: Image.network(
+                  url+mObj.image,
+                  width: double.infinity,
+                  height: double.infinity,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),
           Container(
             margin: const EdgeInsets.only(top: 10),
             child: Text(
-                mObj["name"],
+                mObj.name,
                 style: TextStyle(
                   color: TColor.primaryText80,
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
+                  overflow: TextOverflow.ellipsis,
                 ),
             ),
           ),

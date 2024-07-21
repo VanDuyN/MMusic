@@ -1,7 +1,10 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:mmusic/api/api.dart';
 import 'package:mmusic/common/color_extension.dart';
 import 'package:mmusic/services/song_handler.dart';
+import 'package:mmusic/view_model/song_model.dart';
 class PlayPauseButton extends StatelessWidget {
   final SongHandler songHandler;
   final double size;
@@ -16,6 +19,7 @@ class PlayPauseButton extends StatelessWidget {
         if (snapshot.hasData) {
           // Retrieve the playing status from the playback state
           bool playing = snapshot.data!.playing;
+
           // Return an IconButton that toggles play/pause on press
           return Container(
             width: size*1.5,

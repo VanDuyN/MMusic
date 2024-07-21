@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mmusic/common/color_extension.dart';
-import 'package:mmusic/components/player_deck.dart';
 import 'package:mmusic/services/song_handler.dart';
 import 'package:mmusic/view/folders/folders_view.dart';
 import 'package:mmusic/view/home/home_view.dart';
 import 'package:mmusic/view/search/search_view.dart';
-import 'package:scroll_to_index/scroll_to_index.dart';
 class MainTabview extends StatefulWidget{
   final SongHandler songHandler ;
   const MainTabview({super.key, required this.songHandler});
@@ -15,14 +13,6 @@ class MainTabview extends StatefulWidget{
 class _MainTabViewState extends State<MainTabview> with SingleTickerProviderStateMixin{
   TabController? controller;
   int selectTab = 0;
-  final AutoScrollController _autoScrollController = AutoScrollController();
-  void _scrollTo(int index) {
-    _autoScrollController.scrollToIndex(
-      index,
-      preferPosition: AutoScrollPosition.middle,
-      duration: const Duration(milliseconds: 800),
-    );
-  }
   @override
   void initState() {
     super.initState();
@@ -51,7 +41,6 @@ class _MainTabViewState extends State<MainTabview> with SingleTickerProviderStat
             FoldersView(songHandler: widget.songHandler,),
           ],
           ),
-
         ],
       ),
 
@@ -113,5 +102,4 @@ class _MainTabViewState extends State<MainTabview> with SingleTickerProviderStat
       ),
     );
   }
-
 }

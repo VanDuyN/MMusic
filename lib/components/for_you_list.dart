@@ -1,15 +1,14 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:mmusic/components/player_deck.dart';
-import 'package:mmusic/view/main_player/main_player_view.dart';
+import 'package:mmusic/view_model/song_model.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
-import 'package:get/get.dart';
 import 'package:mmusic/components/song_item.dart';
 import 'package:mmusic/services/song_handler.dart';
 import 'package:mmusic/utils/formated_title.dart';
 
 class ForYouList extends StatelessWidget {
-  final List<MediaItem> songs;
+  final List<SongModel> songs;
   final SongHandler songHandler;
   final AutoScrollController autoScrollController;
   const ForYouList({
@@ -31,7 +30,7 @@ class ForYouList extends StatelessWidget {
       physics: const BouncingScrollPhysics(),
       itemCount: songs.length,
       itemBuilder: (context, index) {
-        MediaItem song = songs[index];
+        MediaItem song = songs[index] as MediaItem;
         // Build the SongItem based on the playback state
         return StreamBuilder<MediaItem?>(
           stream: songHandler.mediaItem.stream,
@@ -58,13 +57,13 @@ class ForYouList extends StatelessWidget {
       children: [
         // Display the last song item
         SongItem(
-          id: int.parse(song.displayDescription!),
+          id: song.id.toString(),
           isPlaying: song == playingSong,
           title: formattedTitle(song.title),
           artist: song.artist,
           onSongTap: () async {
             await songHandler.skipToQueueItem(songs.length - 1);
-            Get.to(MainPlayerView(songHandler: songHandler,isLast: false,));
+            //Get.to(MainPlayerView(songHandler: songHandler,isLast: false,song: ,));
           },
           art: song.artUri,
         ),
@@ -80,13 +79,13 @@ class ForYouList extends StatelessWidget {
   // Build a regular song item
   Widget _buildRegularSongItem(MediaItem song, MediaItem? playingSong) {
     return SongItem(
-      id: int.parse(song.displayDescription!),
+      id: song.id.toString(),
       isPlaying: song == playingSong,
       title: formattedTitle(song.title),
       artist: song.artist,
       onSongTap: () async {
-        await songHandler.skipToQueueItem(songs.indexOf(song));
-        Get.to(MainPlayerView(songHandler: songHandler, isLast: false,));
+        await songHandler.skipToQueueItem(songs.indexOf(song as SongModel));
+        //Get.to(MainPlayerView(songHandler: songHandler, isLast: false,));
       },
       art: song.artUri,
     );

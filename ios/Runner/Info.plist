@@ -16,6 +16,12 @@
 	<string>mmusic</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<key>NSAppleMusicUsageDescription</key>
+    <string>$(PROJECT_NAME) requires access to media library</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>$(PROJECT_NAME) requires access to the photo library</string>
+    <key>NSDocumentsFolderUsageDescription</key>
+    <string>$(PROJECT_NAME) requires access to the documents folder</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>

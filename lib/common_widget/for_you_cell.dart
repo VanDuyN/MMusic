@@ -1,64 +1,117 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mmusic/api/api.dart';
 import 'package:mmusic/common/color_extension.dart';
-import 'package:mmusic/view/play_list/play_list_view.dart';
+import 'package:mmusic/services/song_handler.dart';
+import 'package:mmusic/view/main_player_music_view/main_player_view.dart';
+
+import 'package:mmusic/view_model/song_model.dart';
+
 
 class ForYouCell extends StatelessWidget {
+  final SongModel mObj;
+  final SongHandler songHandler;
 
-  final Map mObj;
-  const ForYouCell({super.key, required this.mObj});
+  const ForYouCell({super.key, required this.mObj, required this.songHandler});
+  Future<String> getNameArtist(String id) async {
+    // Khai báo biến name với kiểu dữ liệu String
+    String name;
+    // Gọi API và chuyển đổi JSON trả về thành một map
+    final jsonResponse = jsonDecode(await API().getArtistById(id));
+    // Kiểm tra trạng thái của JSON trả về
+    if (jsonResponse['status']) {
+      // Lấy giá trị của trường 'name' trong phần 'success' của JSON
+      name = jsonResponse['success']['name'];
+      return name;
+    }
+    // Nếu không có dữ liệu hợp lệ, trả về một chuỗi rỗng
+    return "";
+  }
+  Future<String> _getArtistNames(SongModel song) async {
+    // Trả về danh sách các artist tên
+    final artistNames = await Future.wait(
+        song.idArtist.map((id) => getNameArtist(id))
+    );
+    return artistNames.join(', ');
+  }
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      // onTap: (){
-      //   Get.to(()=> const PlayListView());
-      // },
-      child: Container(
+    var url = API().getUrl();
+
+    return Container(
         width: 182,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(9),
         ),
-        margin: const EdgeInsets.only(left: 15,top:5, right: 10),
+        margin: const EdgeInsets.only(left: 15, top: 5, right: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(9),
-              child: Image.asset(
-                mObj["image"],
-                width: 182,
-                height: 182,
-                fit: BoxFit.fill,
-              ),
-            ),
-              Container(
-                margin: const EdgeInsets.only(top: 8),
-                padding: const EdgeInsets.only(left: 10,right: 1),
-                child: Text(
-                  mObj["name"],
-                  style: TextStyle(
-                    color: TColor.primaryText80,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                  ),
+            InkWell(
+              onTap: () {
+                songHandler.initSongs(song: mObj);
+                Get.to(() => MainPlayerView(
+                  songHandler: songHandler,
+                  isLast: false,
+                  name: mObj.name,
+                ));
+              },
+              child:ClipRRect(
+                borderRadius: BorderRadius.circular(9),
+                child: Image.network(
+                  url + mObj.image,
+                  width: 182,
+                  height: 182,
+                  fit: BoxFit.fill,
                 ),
               ),
+            ),
             Container(
-              margin: const EdgeInsets.only(top: 2),
-              padding: const EdgeInsets.only(left: 10,right: 1),
+              margin: const EdgeInsets.only(top: 8),
+              padding: const EdgeInsets.only(left: 10, right: 1),
               child: Text(
-                mObj["artist"],
+                mObj.name,
                 style: TextStyle(
-                  color: TColor.primaryText35,
-                  fontSize: 10,
+                  color: TColor.primaryText80,
+                  fontSize: 13,
                   fontWeight: FontWeight.w600,
                 ),
               ),
             ),
+            FutureBuilder<String>(
+              future: _getArtistNames(mObj),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Text('No artists found');
+                } else {
+                  final artistNames = snapshot.data!;
+                  return Container(
+                    height: 15,
+                    margin: const EdgeInsets.only(top: 2),
+                    padding: const EdgeInsets.only(left: 10, right: 1),
+                    child: Text(
+                      artistNames,
+                      style: TextStyle(
+                        color: TColor.primaryText35,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  );
+                }
+              },
+            ),
           ],
         ),
-      ),
+
     );
   }
 }
+

@@ -4,13 +4,17 @@ import 'package:get/get.dart';
 import 'package:mmusic/components/player_button.dart';
 import 'package:mmusic/components/song_progress.dart';
 import 'package:mmusic/services/song_handler.dart';
-import 'package:on_audio_query/on_audio_query.dart';
 import 'package:mmusic/common/color_extension.dart';
 class MainPlayerView extends StatelessWidget {
   final bool isLast;
   final SongHandler songHandler;
-  const MainPlayerView({super.key, required this.songHandler, required this.isLast});
-
+  final String name;
+  const MainPlayerView({
+    super.key,
+    required this.songHandler,
+    required this.isLast,
+    required this.name
+  });
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +32,7 @@ class MainPlayerView extends StatelessWidget {
             ),
             title: Center(
               child: Text(
-                " Em của ngày hôm qua",
+                name,
                 style: TextStyle(
                     color: TColor.primaryText80,
                     fontSize: 12,
@@ -48,17 +52,18 @@ class MainPlayerView extends StatelessWidget {
               )
             ],
           ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: StreamBuilder<MediaItem?>(
-            stream: songHandler.mediaItem.stream,
-            builder: (context, snapshot) {
-              MediaItem? playingSong = snapshot.data;
-              // If there's no playing song, return an empty widget
-              return playingSong == null
-                  ? const SizedBox.shrink()
-                  : _buildPlayer(context, playingSong);
-            },
+
+    body: Padding(
+      padding: const EdgeInsets.all(20.0),
+          child: StreamBuilder<MediaItem?>(
+          stream: songHandler.mediaItem.stream,
+          builder: (context, snapshot) {
+          MediaItem? playingSong = snapshot.data;
+          // If there's no playing song, return an empty widget
+          return playingSong == null
+          ? const SizedBox.shrink()
+              : _buildPlayer(context, playingSong);
+          },
         ),
       ),
     );
@@ -79,57 +84,50 @@ class MainPlayerView extends StatelessWidget {
   Widget _buildLyrics(BuildContext context,MediaItem playingSong){
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 30),
-            child: Text("Lời", style:TextStyle(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 30),
+          child: Text("Lời", style:TextStyle(
               color: TColor.primaryText60,
               fontWeight: FontWeight.w700,
               fontSize: 18
-            ),),
+          ),),
+        ),
+        Container(
+          width: double.maxFinite,
+          margin:const EdgeInsets.all(10),
+          padding:const EdgeInsets.all(15),
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  TColor.primaryTopIcon,
+                  TColor.primaryBottomIcon,
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+              borderRadius: BorderRadius.circular(25)
           ),
-          Container(
-            width: double.maxFinite,
-            margin:const EdgeInsets.all(10),
-            padding:const EdgeInsets.all(15),
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    TColor.primaryTopIcon,
-                    TColor.primaryBottomIcon,
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-                borderRadius: BorderRadius.circular(25)
-            ),
-            child: Text(
-              "Đang được cập nhật",
-              style: TextStyle(
+          child: Text(
+            "Đang được cập nhật",
+            style: TextStyle(
                 color: TColor.primaryText,
                 fontWeight: FontWeight.w600,
                 fontSize: 20
             ),
-            ),
-          )
-        ],
+          ),
+        )
+      ],
     );
   }
   Widget _buildArtwork(MediaItem playingSong) {
-    return Positioned.fill(
-      child: QueryArtworkWidget(
-        // Set up artwork properties
-        id: int.parse(playingSong.displayDescription!),
-        type: ArtworkType.AUDIO,
-        size: 1080,
-        quality: 100,
-        artworkHeight: 345,
-        artworkWidth: 330,
-        artworkBorder: BorderRadius.circular(16.0),
-        nullArtworkWidget:  Image.asset("assets/img/logo_app.png",width: 330,height: 345,),
-      ),
+    return Image.network(
+      playingSong.artUri.toString(),
+      height: 345,
+      width: 330,
     );
+
   }
   Widget _buildContent(BuildContext context, MediaItem playingSong) {
     return Column(
@@ -148,8 +146,8 @@ class MainPlayerView extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(left: 20, top: 20,right: 10,bottom: 10),
       child: Column(
-         mainAxisAlignment: MainAxisAlignment.start,
-         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             isLast ? "" : playingSong.title,
@@ -191,7 +189,9 @@ class MainPlayerView extends StatelessWidget {
           : SongProgress(
         // Use SongProgress widget to display progress bar
           totalDuration: totalDuration,
-          songHandler: songHandler),
+          songHandler: songHandler,
+          isPlayDeck: true,
+      ),
     );
   }
 }

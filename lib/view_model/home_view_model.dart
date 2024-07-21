@@ -1,31 +1,42 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mmusic/api/api.dart';
+import 'package:mmusic/view_model/arist_model.dart';
+import 'package:mmusic/view_model/song_model.dart';
+
 
 class HomeViewModel extends GetxController{
+
+  Future<List<Artist>> getDataArist() async {
+    var jsonResponse = jsonDecode(await API().getAllArist());
+    if (jsonResponse['status']) {
+      List<dynamic> data = jsonResponse['success'];
+      return data.map((item) => Artist.fromJson(item)).toList();
+    }
+    return [];
+  }
+  Future<List<SongModel>> getDataSong() async {
+    var jsonResponse = jsonDecode(await API().getAllSong());
+    if (jsonResponse['status']) {
+      List<dynamic> data = jsonResponse['success'];
+      return data.map((item) => SongModel.fromJson(item)).toList();
+    }
+    return [];
+  }
+  Future<List<SongModel>> getSongByArtist(String id) async {
+    var jsonResponse = jsonDecode(await API().getSongByIdArtist(id));
+    if (jsonResponse['status']) {
+      List<dynamic> data = jsonResponse['success'];
+      return data.map((item) => SongModel.fromJson(item)).toList();
+    }
+    return [];
+  }
   final txtSearch= TextEditingController().obs;
   //album
-  final continueListeningArr = [
-    {
-      "image":"assets/img/img_1.png",
-      "name":"Coffee & Jazz"
-    },{
-      "image":"assets/img/img_2.png",
-      "name":"Coffee & Jazz"
-    },{
-      "image":"assets/img/img_3.png",
-      "name":"Coffee & Jazz"
-    },{
-      "image":"assets/img/img_4.png",
-      "name":"Coffee & Jazz"
-    },{
-      "image":"assets/img/img_3.png",
-      "name":"Coffee & Jazz"
-    },{
-      "image":"assets/img/img_4.png",
-      "name":"Coffee & Jazz"
-    },
 
-  ].obs;
+
   //Nghệ sĩ
   final artistListArr = [
     {

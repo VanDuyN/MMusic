@@ -4,6 +4,7 @@ import 'package:mmusic/components/song_item.dart';
 import 'package:mmusic/notifiers/song_provider.dart';
 import 'package:mmusic/services/song_handler.dart';
 import 'package:mmusic/utils/formated_title.dart';
+import 'package:mmusic/view_model/song_model.dart';
 import 'package:provider/provider.dart';
 import 'package:audio_service/audio_service.dart';
 class SearchViewHome extends StatefulWidget {
@@ -21,16 +22,14 @@ class _SearchViewState extends State<SearchViewHome> {
   final TextEditingController _textEditingController = TextEditingController();
 
   // Function to search for songs based on the input value
-  void _search({required String value, required List<MediaItem> songs}) {
+  void _search({required String value, required List<SongModel> songs}) {
     for (var song in songs) {
       // Check if the title or artist of the song contains the search value
-      bool containsTitle = song.title
+      bool containsTitle = song.name
           .toLowerCase()
           .replaceAll(" ", "")
           .contains(value.toLowerCase().replaceAll(" ", ""));
-      bool containsArtist = song.artist!
-          .toLowerCase()
-          .replaceAll(" ", "")
+      bool containsArtist = song.idArtist
           .contains(value.toLowerCase().replaceAll(" ", ""));
 
       // If the song matches the search criteria and is not already in the result list, add it
@@ -38,7 +37,7 @@ class _SearchViewState extends State<SearchViewHome> {
         bool contains = _result.any((element) => element.id == song.id);
         if (!contains) {
           setState(() {
-            _result.add(song);
+            _result.add(song as MediaItem);
           });
         }
       }
@@ -48,7 +47,7 @@ class _SearchViewState extends State<SearchViewHome> {
   Widget build(BuildContext context) {
     return Consumer<SongsProvider>(
       builder: (context, ref, child) {
-        List<MediaItem> songs = ref.songs;
+        List<SongModel> songs = ref.songs;
         return Scaffold(
           appBar: AppBar(
             title: TextField(
@@ -99,7 +98,7 @@ class _SearchViewState extends State<SearchViewHome> {
       );
     } else {
       // Display the search result or the full song list
-      return _buildSongList(ref.songs);
+      return _buildSongList(ref.songs.cast<MediaItem>());
     }
   }
 
@@ -163,7 +162,7 @@ class _SearchViewState extends State<SearchViewHome> {
         SongItem(
           art: song.artUri!,
           searchedWord: _textEditingController.text.trim(),
-          id: int.parse(song.displayDescription!),
+          id: song.id.toString(),
           isPlaying: song == playingSong,
           title: formattedTitle(song.title),
           artist: song.artist,
@@ -188,7 +187,7 @@ class _SearchViewState extends State<SearchViewHome> {
     return SongItem(
       art: song.artUri!,
       searchedWord: _textEditingController.text.trim(),
-      id: int.parse(song.displayDescription!),
+      id: song.id.toString(),
       isPlaying: song == playingSong,
       title: formattedTitle(song.title),
       artist: song.artist,

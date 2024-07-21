@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:mmusic/api/api.dart';
 import 'package:mmusic/common/color_extension.dart';
@@ -23,6 +22,7 @@ class _LoginViewState extends State<LoginView> {
   late SharedPreferences prefs;
 
 
+
   final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
@@ -33,7 +33,6 @@ class _LoginViewState extends State<LoginView> {
   void initSharedPref() async{
     prefs = await SharedPreferences.getInstance();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -130,14 +129,17 @@ class _LoginViewState extends State<LoginView> {
                           if (_formKey.currentState?.validate() ?? false) {
                             // Xử lý khi form hợp lệ và button được nhấn
                             var jsonResponse= jsonDecode(await API().login(_emailController.text, _passwordController.text));
-                            var myToken = jsonResponse['token'];
-                            prefs.setString('token', myToken);
-                            jsonResponse['status'] ?
+                            var status = jsonResponse['status'];
+                            if(status){
+                              var myToken = jsonResponse['token'];
+                              prefs.setString('token', myToken);
+                            }
+                            status ?
                             Get.offAll(()=>MainTabview(songHandler: widget.songHandler,),)
                                 :ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Center(
-                                    child: Text('Email đã tồn tại', style: TextStyle(
+                                    child: Text('${jsonResponse['success']}', style: TextStyle(
                                         fontWeight: FontWeight.w700,
                                         color: TColor.primaryText,
                                         fontSize: 20

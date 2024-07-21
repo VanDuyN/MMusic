@@ -26,7 +26,7 @@ Future<void> main() async {
       providers: [
         // Provide the SongsProvider with the loaded songs and SongHandler
         ChangeNotifierProvider(
-          create: (context) => SongsProvider()..loadSongs(_songHandler),
+          create: (context) => SongsProvider()..loadSong(_songHandler),
         ),
       ],
       // Use the MainApp widget as the root of the application

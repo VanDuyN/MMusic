@@ -35,7 +35,7 @@ class _SearchViewState extends State<SearchView> {
         child: Text(
           "Tìm kiếm",
           style: TextStyle(
-              color: TColor.primaryTextM,
+              color: TColor.primary,
               fontSize: 27,
               fontWeight: FontWeight.w700
           ),
@@ -71,6 +71,9 @@ class _SearchViewState extends State<SearchView> {
                     ),
                     child: TextField(
                       controller: homeVM.txtSearch.value,
+                      style: TextStyle(
+                        color: TColor.bg,
+                      ),
                       decoration: InputDecoration(
                         focusedBorder: InputBorder.none,
                         enabledBorder: InputBorder.none,

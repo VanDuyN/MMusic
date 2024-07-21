@@ -8,7 +8,7 @@ class TitleSelection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(padding:
-    const EdgeInsets.only(left: 15,top: 20),
+    const EdgeInsets.only(left: 15),
       child: Text(
         title,
         style: TextStyle(

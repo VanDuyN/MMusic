@@ -74,7 +74,7 @@ class _PlayListViewState extends State<PlayListView> {
                   itemCount: 4,
                   itemBuilder: (context,index){
                     var mOBJ = homeVM.forYouListArr[index];
-                    return SongsPlaylistCell(mObj: mOBJ,);
+                    return ;//SongsPlaylistCell(mObj: mOBJ,);
                   },
                 ),
               ),

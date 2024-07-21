@@ -3,7 +3,7 @@ import 'package:mmusic/common/color_extension.dart';
 import 'package:get/get.dart';
 import 'dart:math';
 
-import 'package:mmusic/view/main_player/main_player_view.dart';
+import 'package:mmusic/view/main_player_music_view/main_player_view.dart';
 class RecentlyCell extends StatelessWidget {
   final Map mObj;
   const RecentlyCell({super.key, required this.mObj});
