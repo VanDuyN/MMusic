@@ -57,6 +57,7 @@ class MyApp extends StatelessWidget {
 
       ),
       home: SplashView(songHandler: _songHandler),
+      //home: const MyProfileView(),
     );
   }
 }

@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:mmusic/api/api.dart';
 import 'package:mmusic/common/color_extension.dart';
@@ -111,17 +110,17 @@ class _LoginViewState extends State<LoginView> {
                     Container(
                       margin: const EdgeInsets.fromLTRB(0, 20, 0, 5),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50.0), // Độ cong của góc
+                        borderRadius: BorderRadius.circular(50.0),
                         border: Border.all(
-                          color: TColor.primary.withOpacity(0.5), // Màu viền và độ mờ của nó
-                          width: 0, // Độ dày của viền
+                          color: TColor.primary.withOpacity(0.5),
+                          width: 0,
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: TColor.primary.withOpacity(0.8), // Màu của shadow
-                            spreadRadius: 1, // Bán kính lan rộng của shadow
-                            blurRadius: 10, // Độ mờ của shadow
-                            offset: const Offset(0, 2), // Độ dịch chuyển của shadow theo chiều dọc và ngang
+                            color: TColor.primary.withOpacity(0.8),
+                            spreadRadius: 1,
+                            blurRadius: 10, 
+                            offset: const Offset(0, 2), //
                           ),
                         ],
                       ),
@@ -196,7 +195,7 @@ class _LoginViewState extends State<LoginView> {
                           ),
                         )
                       ],
-                    ) // bạn chưa có tai khoan
+                    )
                   ],
                 ),
               ),
@@ -223,6 +222,8 @@ class _LoginViewState extends State<LoginView> {
           labelText: labelText,
           labelStyle: TextStyle(color: TColor.unfocused),
           icon: Icon(icon, color: TColor.lightGray.withOpacity(0.5)),
+          errorStyle: TextStyle(color: TColor.primaryTopIcon, fontSize: 12), // Tùy chỉnh style của error text
+          errorBorder: InputBorder.none,// Tùy chỉnh style của error border
         ),
         validator: (value) {
           if (value == null || value.isEmpty) {
@@ -251,6 +252,8 @@ class _LoginViewState extends State<LoginView> {
           labelText: labelText,
           labelStyle: TextStyle(color: TColor.unfocused),
           icon: Icon(icon, color: TColor.lightGray.withOpacity(0.5)),
+          errorStyle: TextStyle(color: TColor.primaryTopIcon, fontSize: 12), // Tùy chỉnh style của error text
+          errorBorder: InputBorder.none,
           suffixIcon: IconButton(
             icon: Icon(
               obscureText ? Icons.visibility : Icons.visibility_off,

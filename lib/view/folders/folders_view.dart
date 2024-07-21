@@ -73,7 +73,9 @@ class _FoldersViewState extends State<FoldersView> with SingleTickerProviderStat
           Container(
             margin: const EdgeInsets.only(right: 10),
             child: IconButton(
-                onPressed: (){},
+                onPressed: (){
+
+                },
                 icon: Icon(
                   Icons.search,
                   size: 30,

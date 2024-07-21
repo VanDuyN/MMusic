@@ -11,6 +11,7 @@ import 'package:mmusic/components/player_deck.dart';
 import 'package:mmusic/notifiers/song_provider.dart';
 import 'package:mmusic/services/song_handler.dart';
 import 'package:mmusic/view/login/login_view.dart';
+import 'package:mmusic/view/my_profile/my_profile_view.dart';
 import 'package:mmusic/view_model/home_view_model.dart';
 import 'package:mmusic/view_model/splash_view_model.dart';
 import 'package:provider/provider.dart';
@@ -115,7 +116,7 @@ class _HomeViewState extends State<HomeView> {
                 ),
               ),
               onTap: (){
-                splashVM.closeDrawer();
+                Get.off(const MyProfileView());
               },
             ),
             Divider(
