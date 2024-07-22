@@ -61,7 +61,7 @@ class MainPlayerView extends StatelessWidget {
           MediaItem? playingSong = snapshot.data;
           // If there's no playing song, return an empty widget
           return playingSong == null
-          ? const SizedBox.shrink()
+              ? const SizedBox.shrink()
               : _buildPlayer(context, playingSong);
           },
         ),
@@ -122,10 +122,12 @@ class MainPlayerView extends StatelessWidget {
     );
   }
   Widget _buildArtwork(MediaItem playingSong) {
+    //return SizedBox();
     return Image.network(
       playingSong.artUri.toString(),
       height: 345,
       width: 330,
+      fit: BoxFit.contain,
     );
 
   }

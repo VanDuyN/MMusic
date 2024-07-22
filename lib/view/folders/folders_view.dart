@@ -49,7 +49,7 @@ class _FoldersViewState extends State<FoldersView> with SingleTickerProviderStat
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: Container(
-          margin: const EdgeInsets.only(left: 10),
+          margin: const EdgeInsets.only(left: 5),
           child: Image.asset(
             'assets/img/logo_app.png',
             width: 50,
@@ -71,7 +71,7 @@ class _FoldersViewState extends State<FoldersView> with SingleTickerProviderStat
           ),
         actions: [
           Container(
-            margin: const EdgeInsets.only(right: 10),
+            margin: const EdgeInsets.only(right: 5),
             child: IconButton(
                 onPressed: (){},
                 icon: Icon(
@@ -93,7 +93,7 @@ class _FoldersViewState extends State<FoldersView> with SingleTickerProviderStat
               height: kToolbarHeight,
               child: TabBar(controller: controller,
                 isScrollable: true,
-                indicatorPadding: const EdgeInsets.symmetric(horizontal: 5,vertical: 10),
+                indicatorPadding: const EdgeInsets.symmetric(horizontal: 5,vertical: 5),
                 labelStyle: TextStyle(color:
                     TColor.primary,
                     fontSize: 15,

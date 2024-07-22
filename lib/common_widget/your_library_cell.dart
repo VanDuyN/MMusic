@@ -20,7 +20,7 @@ class LibraryCell extends StatelessWidget {
             ),
           ),
           Container(
-            margin: const EdgeInsets.only(left: 20),
+            margin: const EdgeInsets.only(left: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,

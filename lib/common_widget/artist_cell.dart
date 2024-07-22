@@ -12,9 +12,25 @@ class ArtistCell extends StatelessWidget {
   final SongHandler songHandler;
   const ArtistCell({super.key, required this.mObj, required this.songHandler});
   Future<void> _initSongsAndNavigate() async {
+    final SongHandler songHD = SongHandler();
     final List<SongModel> songs = await HomeViewModel().getSongByArtist(mObj.id);
-    songHandler.initListSongs(songs: songs);
-    Get.to(() => ListSongArtist(songHandler: songHandler,mObj: mObj,));
+
+    if (songs.isEmpty) {
+      Get.to(() => ListSongArtist(songHandler: songHD, mObj: mObj));
+      return; // Dừng thực hiện tiếp tục nếu không có bài hát
+    }
+    final currentMediaItem = songHandler.mediaItem.value;
+    final shouldInitSongs = currentMediaItem == null ||
+        currentMediaItem.artist != mObj.name ||
+        (currentMediaItem.artist == mObj.name && songs.length > 1);
+
+    if (shouldInitSongs) {
+      songHandler.queue.value.clear();
+      songHandler.initListSongs(songs: songs);
+      Get.to(() => ListSongArtist(songHandler: songHandler, mObj: mObj));
+    } else {
+      Get.to(() => ListSongArtist(songHandler: songHandler, mObj: mObj));
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -28,7 +44,6 @@ class ArtistCell extends StatelessWidget {
             onTap: (){
               _initSongsAndNavigate();
             },
-
             child: CircleAvatar(
               radius: 80,
               child: ClipOval(

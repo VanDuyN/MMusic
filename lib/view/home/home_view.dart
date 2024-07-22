@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -11,14 +10,13 @@ import 'package:mmusic/common_widget/for_you_cell.dart';
 import 'package:mmusic/common_widget/recently_cell.dart';
 import 'package:mmusic/common_widget/title_selection.dart';
 import 'package:mmusic/components/player_deck.dart';
-import 'package:mmusic/notifiers/song_provider.dart';
 import 'package:mmusic/services/song_handler.dart';
 import 'package:mmusic/view/login/login_view.dart';
 import 'package:mmusic/view_model/arist_model.dart';
+import 'package:mmusic/view_model/category_model.dart';
 import 'package:mmusic/view_model/home_view_model.dart';
 import 'package:mmusic/view_model/song_model.dart';
 import 'package:mmusic/view_model/splash_view_model.dart';
-import 'package:provider/provider.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 class HomeView extends StatefulWidget {
@@ -57,14 +55,13 @@ class _HomeViewState extends State<HomeView> {
     initSharedPref();
   }
   void initSharedPref() async{
-
     prefs = await SharedPreferences.getInstance();
     Map<String,dynamic> jwtDecodeToken = JwtDecoder.decode(prefs.getString('token')!);
     setState(() {
       prefs.getString('token') != null ? isCheckUser = true : isCheckUser = false;
       isCheckUser
-          ? getImage(jwtDecodeToken['email'])
-          :const SizedBox();
+        ? getImage(jwtDecodeToken['email'])
+        :const SizedBox();
     });
 
   }
@@ -76,6 +73,7 @@ class _HomeViewState extends State<HomeView> {
     var splashVM = Get.find<SplashViewModel>();
     final Future<List<Artist>> artistArr = HomeViewModel().getDataArist();
     final Future<List<SongModel>> songArr = HomeViewModel().getDataSong();
+    final Future<List<CategoryModel>> categoriesArr = HomeViewModel().getAllCategory();
     return Scaffold(
       key: splashVM.scaffoldKey,
       drawer: Drawer(
@@ -250,7 +248,6 @@ class _HomeViewState extends State<HomeView> {
             ),
           ),
         ),
-
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -333,17 +330,29 @@ class _HomeViewState extends State<HomeView> {
                     ),
                   ),
                   const TitleSelection(title: "Thể loại đề xuất"),
-                  SizedBox(
-                    height: 162,
-                    child: ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 6,
-                      itemBuilder: (context, index) {
-                        var mOBJ = homeVM.recentlyListArr[index];
-                        return RecentlyCell(mObj: mOBJ,);
-                      },
-                    ),
+                  FutureBuilder<List<CategoryModel>>(
+                    future: categoriesArr,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return const Center(child: Text('No data found'));
+                      } else {
+                        final categories = snapshot.data!;
+                        return SizedBox(
+                          height: 200,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: categories.length,
+                            itemBuilder: (context, index) {
+                              return RecentlyCell(category: categories[index], songHandler: widget.songHandler);
+                            },
+                          ),
+                        );
+                      }
+                    },
                   ),
                   const TitleSelection(title: "Dành cho bạn"),
                   Container(
@@ -360,7 +369,7 @@ class _HomeViewState extends State<HomeView> {
                         } else {
                           final songs = snapshot.data!;
                           return ListView.builder(
-                            padding: const EdgeInsets.only(left: 20),
+                            padding: const EdgeInsets.only(left: 10),
                             scrollDirection: Axis.horizontal,
                             itemCount: songs.length,
                             itemBuilder: (context, index) {

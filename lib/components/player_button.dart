@@ -17,9 +17,7 @@ class PlayerButton extends StatelessWidget {
           // Retrieve the playing status from the playback state
           int? currentIndex = snapshot.data!.queueIndex;
           bool hasPrevious = currentIndex != null && currentIndex > 0;
-          bool hasNext = currentIndex != null && currentIndex < songHandler.queue.value.length - 1;
-
-
+          bool hasNext = currentIndex != null && currentIndex < songHandler.queue.value.length -1;
           // Return an IconButton that toggles play/pause on press
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -46,7 +44,7 @@ class PlayerButton extends StatelessWidget {
                         weight: 14,
                         size: 40,
                         Icons.skip_previous,
-                        color: hasPrevious ? TColor.primaryText: TColor.primaryText28,
+                        color: hasPrevious?  TColor.primaryText: TColor.primaryText28,
                       ),
                     ),
                   ),
@@ -62,7 +60,7 @@ class PlayerButton extends StatelessWidget {
                         size: 40,
                         Icons.skip_next,
                         color:
-                        hasNext? TColor.primaryText: TColor.primaryText28,
+                        hasNext ? TColor.primaryText: TColor.primaryText28,
                       ),
                     ),
                   ),
@@ -129,7 +127,6 @@ class PlayerButton extends StatelessWidget {
                   ),
                 ],
               ),
-
               IconButton(
                 onPressed: () {},
                 icon: Image.asset(

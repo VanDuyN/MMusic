@@ -52,7 +52,7 @@ class _YourArtistViewState extends State<YourArtistView> {
                   Container(
                     margin: const EdgeInsets.only(left: 10),
                     child: Text(
-                      "Nghệ sĩ bạn yêu thích",
+                      "Nghệ sĩ yêu thích",
                       style: TextStyle(
                           color: TColor.primaryText,
                           fontSize: 20,

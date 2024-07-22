@@ -17,7 +17,7 @@ class _YourFolderViewState extends State<YourLibraryView> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        margin: const EdgeInsets.only(left: 20,right: 10),
+        margin: const EdgeInsets.only(left: 10,right: 5),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,

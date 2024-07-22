@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-const url = "http://192.168.10.137:3000/";
+const url = "http://192.168.1.3:3000/";
 
 class API{
   String getUrl(){
@@ -69,6 +69,22 @@ class API{
     var response = await http.post(Uri.parse("${url}getSongByIdArtist"),
         headers: {"Content-Type":"application/json"},
         body:jsonEncode(regBody)
+    );
+    return response.body;
+  }
+  Future<String> getSongByIdCategory(String id) async{
+    var regBody={
+      "id":id,
+    };
+    var response = await http.post(Uri.parse("${url}getSongByIdCategory"),
+        headers: {"Content-Type":"application/json"},
+        body:jsonEncode(regBody)
+    );
+    return response.body;
+  }
+  Future<String> getAllCategories() async{
+    var response = await http.get(Uri.parse("${url}getAllCategory"),
+      headers: {"Content-Type":"application/json"},
     );
     return response.body;
   }

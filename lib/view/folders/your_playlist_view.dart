@@ -94,7 +94,7 @@ class _PlaylistViewState extends State<YourPlaylistView> {
                   Container(
                     margin: const EdgeInsets.only(left: 10),
                     child: Text(
-                      "Danh sách phát bạn yêu thích",
+                      "Danh sách yêu thích",
                       style: TextStyle(
                           color: TColor.primaryText,
                           fontSize: 20,

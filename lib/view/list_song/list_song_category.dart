@@ -1,25 +1,23 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:mmusic/api/api.dart';
 import 'package:mmusic/common/color_extension.dart';
 import 'package:mmusic/common_widget/songs_playlist_cell.dart';
 import 'package:mmusic/components/player_deck.dart';
 import 'package:mmusic/services/song_handler.dart';
-import 'package:mmusic/view_model/arist_model.dart';
+import 'package:mmusic/view_model/category_model.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
-
-class ListSongArtist extends StatefulWidget {
+import 'package:get/get.dart';
+class ListSongCategory extends StatefulWidget {
   final SongHandler songHandler;
-  final Artist mObj;
-
-  const ListSongArtist({super.key, required this.songHandler, required this.mObj});
+  final CategoryModel mObj;
+  const ListSongCategory({super.key, required this.songHandler,required this.mObj});
 
   @override
-  _ListSongArtistState createState() => _ListSongArtistState();
+  State<ListSongCategory> createState() => _ListSongCategoryState();
 }
 
-class _ListSongArtistState extends State<ListSongArtist> {
+class _ListSongCategoryState extends State<ListSongCategory> {
   late AutoScrollController _autoScrollController;
 
   @override
@@ -34,6 +32,7 @@ class _ListSongArtistState extends State<ListSongArtist> {
   }
   @override
   Widget build(BuildContext context) {
+    final url = API().getUrl();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: TColor.bg,
@@ -78,7 +77,7 @@ class _ListSongArtistState extends State<ListSongArtist> {
               width: double.maxFinite,
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                padding:const EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   children: [
                     Image.network(
@@ -102,24 +101,24 @@ class _ListSongArtistState extends State<ListSongArtist> {
                       ),
                     ),
                     StreamBuilder<List<MediaItem>>(
-                      stream: _getQueueStream(),
-                      builder: (context, snapshot) {
-                        List<MediaItem> songs = snapshot.data!;
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          primary: false,
-                          itemCount: songs.length,
-                          itemBuilder: (context, index) {
-                            return SongsPlaylistCell(
-                              mObj: songs[index],
-                              songHandler: widget.songHandler,
-                              isArtist: true,
-                              songs: songs,
-                              index: index,
-                            );
-                          },
-                        );
-                      }
+                        stream: _getQueueStream(),
+                        builder: (context, snapshot) {
+                          List<MediaItem> songs = snapshot.data!;
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            primary: false,
+                            itemCount: songs.length,
+                            itemBuilder: (context, index) {
+                                return SongsPlaylistCell(
+                                mObj: songs[index],
+                                songHandler: widget.songHandler,
+                                isArtist: false,
+                                songs: songs,
+                                index: index,
+                              );
+                            },
+                          );
+                        }
                     ),
                     //PlayerDeck(songHandler: widget.songHandler, isLast: true, onTap: _scrollTo)
                   ],
@@ -127,7 +126,7 @@ class _ListSongArtistState extends State<ListSongArtist> {
               ),
             ),
           ),
-         // _buildPlayerDeck()
+          // _buildPlayerDeck()
         ],
       ),
     );
@@ -151,8 +150,8 @@ class _ListSongArtistState extends State<ListSongArtist> {
           isLast: false,
           onTap: _scrollTo,
         ),
-         Container(
-           color: TColor.bg,
+        Container(
+          color: TColor.bg,
           child: const SizedBox(height: 30,),
         )
       ],

@@ -110,15 +110,13 @@ class PlayerDeck extends StatelessWidget {
           borderRadius: BorderRadius.circular(8.0),
           color: isLast ? Colors.transparent : TColor.bg,
         ),
-        child: ClipRRect(
-          borderRadius:BorderRadius.circular(12),
-          child: Image.network(
-            playingSong.artUri.toString(),
-            fit: BoxFit.cover,
-            width: 60,
-            height: 60,
-          ),
+        child: Image.network(
+          playingSong.artUri.toString(),
+          fit: BoxFit.cover,
+          width: 60,
+          height: 60,
         ),
+
       ),
       title: Text(
         isLast ? "" : playingSong.title,

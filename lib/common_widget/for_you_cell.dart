@@ -16,21 +16,15 @@ class ForYouCell extends StatelessWidget {
 
   const ForYouCell({super.key, required this.mObj, required this.songHandler});
   Future<String> getNameArtist(String id) async {
-    // Khai báo biến name với kiểu dữ liệu String
     String name;
-    // Gọi API và chuyển đổi JSON trả về thành một map
     final jsonResponse = jsonDecode(await API().getArtistById(id));
-    // Kiểm tra trạng thái của JSON trả về
     if (jsonResponse['status']) {
-      // Lấy giá trị của trường 'name' trong phần 'success' của JSON
       name = jsonResponse['success']['name'];
       return name;
     }
-    // Nếu không có dữ liệu hợp lệ, trả về một chuỗi rỗng
     return "";
   }
   Future<String> _getArtistNames(SongModel song) async {
-    // Trả về danh sách các artist tên
     final artistNames = await Future.wait(
         song.idArtist.map((id) => getNameArtist(id))
     );
@@ -65,7 +59,7 @@ class ForYouCell extends StatelessWidget {
                   url + mObj.image,
                   width: 182,
                   height: 182,
-                  fit: BoxFit.fill,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -74,6 +68,8 @@ class ForYouCell extends StatelessWidget {
               padding: const EdgeInsets.only(left: 10, right: 1),
               child: Text(
                 mObj.name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   color: TColor.primaryText80,
                   fontSize: 13,
@@ -98,6 +94,8 @@ class ForYouCell extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 10, right: 1),
                     child: Text(
                       artistNames,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: TColor.primaryText35,
                         fontSize: 10,
@@ -110,7 +108,6 @@ class ForYouCell extends StatelessWidget {
             ),
           ],
         ),
-
     );
   }
 }

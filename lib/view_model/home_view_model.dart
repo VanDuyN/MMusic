@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mmusic/api/api.dart';
 import 'package:mmusic/view_model/arist_model.dart';
+import 'package:mmusic/view_model/category_model.dart';
 import 'package:mmusic/view_model/song_model.dart';
 
 
@@ -33,6 +34,24 @@ class HomeViewModel extends GetxController{
     }
     return [];
   }
+  Future<List<SongModel>> getSongByCategory(String id) async {
+    var jsonResponse = jsonDecode(await API().getSongByIdCategory(id));
+    if (jsonResponse['status']) {
+      List<dynamic> data = jsonResponse['success'];
+      return data.map((item) => SongModel.fromJson(item)).toList();
+    }
+
+    return [];
+  }
+  Future<List<CategoryModel>> getAllCategory() async {
+    var jsonResponse = jsonDecode(await API().getAllCategories());
+    if (jsonResponse['status']) {
+      List<dynamic> data = jsonResponse['success'];
+      return data.map((item) => CategoryModel.fromJson(item)).toList();
+    }
+    return [];
+  }
+
   final txtSearch= TextEditingController().obs;
   //album
 
