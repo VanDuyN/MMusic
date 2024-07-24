@@ -120,13 +120,14 @@ class _ListSongCategoryState extends State<ListSongCategory> {
                           );
                         }
                     ),
-                    //PlayerDeck(songHandler: widget.songHandler, isLast: true, onTap: _scrollTo)
+                    const SizedBox(height: 30,),
+                    PlayerDeck(songHandler: widget.songHandler, isLast: true, onTap: _scrollTo)
                   ],
                 ),
               ),
             ),
           ),
-          // _buildPlayerDeck()
+           _buildPlayerDeck()
         ],
       ),
     );
@@ -152,7 +153,7 @@ class _ListSongCategoryState extends State<ListSongCategory> {
         ),
         Container(
           color: TColor.bg,
-          child: const SizedBox(height: 30,),
+          child: const SizedBox(height: 30,width: double.maxFinite,),
         )
       ],
     );

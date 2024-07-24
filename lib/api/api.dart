@@ -138,5 +138,17 @@ class API{
     );
     return response.body;
   }
+  Future<String> getAllFavourite(String email) async{
+    var regBody={
+      "email":email,
+    };
+    debugPrint(email);
+    var response = await http.post(Uri.parse("${url}getAllFavourite"),
+        headers: {"Content-Type":"application/json"},
+        body:jsonEncode(regBody)
+    );
+    return response.body;
+  }
+
 
 }

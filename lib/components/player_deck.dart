@@ -92,6 +92,7 @@ class PlayerDeck extends StatelessWidget {
   Widget _buildTitle(BuildContext context, MediaItem playingSong) {
     return ListTile(
       onTap: () {
+        isLast ? null :
         // Handle tap on the title
         Get.to(MainPlayerView(
           songHandler: songHandler,

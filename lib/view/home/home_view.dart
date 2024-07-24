@@ -12,7 +12,10 @@ import 'package:mmusic/common_widget/recently_cell.dart';
 import 'package:mmusic/common_widget/title_selection.dart';
 import 'package:mmusic/components/player_deck.dart';
 import 'package:mmusic/services/song_handler.dart';
+import 'package:mmusic/view/Settings/Setting_view.dart';
 import 'package:mmusic/view/login/login_view.dart';
+import 'package:mmusic/view/notifications/notification_view.dart';
+import 'package:mmusic/view/profile/my_profile_view.dart';
 import 'package:mmusic/view_model/album_model.dart';
 import 'package:mmusic/view_model/arist_model.dart';
 import 'package:mmusic/view_model/category_model.dart';
@@ -34,7 +37,9 @@ class _HomeViewState extends State<HomeView> {
   late final SharedPreferences prefs;
   late bool isCheckUser = false;
   late String linkImg ="";
-  late String email;
+  late String emailUser = "";
+  late String name = "";
+  late Map<String,dynamic> jwtDecodeToken;
 
   void _scrollTo(int index) {
     _autoScrollController.scrollToIndex(
@@ -44,10 +49,14 @@ class _HomeViewState extends State<HomeView> {
     );
   }
   void getImage(String email) async{
+
     var  jsonResponse =jsonDecode(await API().getUser(email));
     var url =  API().getUrl();
     linkImg = url + jsonResponse['data']['image'];
+    name = jsonResponse['data']['name'];
+    emailUser = email;
     setState(() {
+
     });
   }
   @override
@@ -58,7 +67,7 @@ class _HomeViewState extends State<HomeView> {
   }
   void initSharedPref() async{
     prefs = await SharedPreferences.getInstance();
-    Map<String,dynamic> jwtDecodeToken = JwtDecoder.decode(prefs.getString('token')!);
+    jwtDecodeToken = JwtDecoder.decode(prefs.getString('token')!);
     setState(() {
       prefs.getString('token') != null ? isCheckUser = true : isCheckUser = false;
       isCheckUser
@@ -97,7 +106,9 @@ class _HomeViewState extends State<HomeView> {
                 fit: BoxFit.contain,)
           ),
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Get.to(const NotificationView());
+              },
               icon: Image.asset(
                 'assets/img/bell_tab.png',
                 width: 25,
@@ -105,7 +116,9 @@ class _HomeViewState extends State<HomeView> {
                 fit: BoxFit.contain,)
           ),
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Get.to(const SettingView());
+              },
               icon: Image.asset(
                 'assets/img/setting_tab.png',
                 width: 25,
@@ -168,7 +181,7 @@ class _HomeViewState extends State<HomeView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Chào mừng quay chở lại !",
+        Text("Chào mừng quay trở lại !!!",
           style: TextStyle(
               color: TColor.primaryText,
               fontSize: 15,
@@ -283,7 +296,9 @@ class _HomeViewState extends State<HomeView> {
                     ),
                   ),
                   onTap: () {
+                    Get.to( MyProfileView(email: emailUser,img: linkImg,name: name,));
                     splashVM.closeDrawer();
+
                   }
               ),
               Divider(

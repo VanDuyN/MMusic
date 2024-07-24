@@ -37,7 +37,6 @@ class _FoldersViewState extends State<FoldersView> with SingleTickerProviderStat
     controller?.addListener((){
       selectTab = controller?.index?? 0;
       setState(() {
-
       });
     });
   }
@@ -130,7 +129,7 @@ class _FoldersViewState extends State<FoldersView> with SingleTickerProviderStat
             Expanded(child:TabBarView(
               controller: controller,
               children: [
-                const YourLibraryView(),
+                YourLibraryView(songHandler: widget.songHandler,),
                 YourFolderView(songHandler: widget.songHandler,),
                 const YourPlaylistView(),
                 const YourArtistView(),

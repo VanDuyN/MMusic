@@ -11,7 +11,9 @@ import 'package:mmusic/view_model/song_model.dart';
 
 class HomeViewModel extends GetxController{
 
+
   Future<List<Artist>> getDataArist() async {
+
     var jsonResponse = jsonDecode(await API().getAllArist());
     if (jsonResponse['status']) {
       List<dynamic> data = jsonResponse['success'];
@@ -45,10 +47,8 @@ class HomeViewModel extends GetxController{
   }
   Future<List<SongModel>> getSongByIds(List<String> id) async {
     var jsonResponse = jsonDecode(await API().getSongByIds(id));
-    debugPrint(id.toString());
     if (jsonResponse['status']) {
       List<dynamic> data = jsonResponse['success'];
-      debugPrint(jsonResponse['success'].toString());
       return data.map((item) => SongModel.fromJson(item)).toList();
     }
     return [];
@@ -62,6 +62,30 @@ class HomeViewModel extends GetxController{
     }
     return [];
   }
+  Future<List<String>> getAllFavorite(String email) async {
+    try {
+      // Gọi API và lấy dữ liệu JSON
+      var response = await API().getAllFavourite(email);
+
+      // Phân tích dữ liệu JSON
+      var jsonResponse = jsonDecode(response);
+
+      // Kiểm tra trạng thái trả về từ API
+      if (jsonResponse['status']) {
+        // Lấy danh sách các mục yêu thích
+        List<dynamic> data = jsonResponse['success'];
+
+        // Chuyển đổi danh sách các mục yêu thích thành List<String>
+        return data.map<String>((item) => item.toString()).toList();
+      } else {
+        // Nếu trạng thái không thành công, trả về mảng rỗng
+        return [];
+      }
+    } catch (e) {
+      // Xử lý lỗi
+      return [];
+    }
+  }
   Future<List<AlbumModel>> getAllAlbum() async {
     var jsonResponse = jsonDecode(await API().getAllAlbum());
     if (jsonResponse['status']) {
@@ -74,6 +98,7 @@ class HomeViewModel extends GetxController{
     var jsonResponse = jsonDecode(await API().checkFavourite(id,email));
     return (jsonResponse['status']) ;
   }
+
 
   final txtSearch= TextEditingController().obs;
   //album

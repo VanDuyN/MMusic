@@ -57,7 +57,7 @@ class _MainPlayerViewState extends State<MainPlayerView> {
       setState(() {
 
       });
-      print('Error decoding token: $e');
+      debugPrint('Error decoding token: $e');
       return null;
     }
   }
@@ -163,7 +163,7 @@ class _MainPlayerViewState extends State<MainPlayerView> {
         if (userSnapshot.connectionState == ConnectionState.waiting) {
           const Center(child: CircularProgressIndicator());
         } else if (userSnapshot.hasError) {
-           const Center(child: Text('Lỗi khi lấy thông tin người dùng'));
+           return const Center(child: Text('Lỗi khi lấy thông tin người dùng'));
         }
 
         final userEmail = userSnapshot.data;

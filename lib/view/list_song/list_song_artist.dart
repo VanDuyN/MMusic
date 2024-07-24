@@ -121,13 +121,14 @@ class _ListSongArtistState extends State<ListSongArtist> {
                         );
                       }
                     ),
-                    //PlayerDeck(songHandler: widget.songHandler, isLast: true, onTap: _scrollTo)
+                    const SizedBox(height: 30,),
+                    PlayerDeck(songHandler: widget.songHandler, isLast: true, onTap: _scrollTo)
                   ],
                 ),
               ),
             ),
           ),
-         // _buildPlayerDeck()
+          _buildPlayerDeck()
         ],
       ),
     );
@@ -153,7 +154,7 @@ class _ListSongArtistState extends State<ListSongArtist> {
         ),
          Container(
            color: TColor.bg,
-          child: const SizedBox(height: 30,),
+          child: const SizedBox(height: 30,width: double.maxFinite,),
         )
       ],
     );

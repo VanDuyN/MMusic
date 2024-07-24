@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:mmusic/common/color_extension.dart';
 import 'package:mmusic/common_widget/your_library_cell.dart';
 import 'package:mmusic/common_widget/title_selection_color.dart';
+import 'package:mmusic/services/song_handler.dart';
+import 'package:mmusic/view/list_song/list_song_favourite.dart';
 import 'package:mmusic/view_model/home_view_model.dart';
+import 'package:mmusic/view_model/song_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 class YourLibraryView extends StatefulWidget {
-  const YourLibraryView({super.key});
+  final SongHandler songHandler;
+  const YourLibraryView({super.key, required this.songHandler});
 
   @override
   State<YourLibraryView> createState() => _YourFolderViewState();
 }
 
 class _YourFolderViewState extends State<YourLibraryView> {
-  final homeVM = Get.put(HomeViewModel());
+
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -34,7 +41,6 @@ class _YourFolderViewState extends State<YourLibraryView> {
                         colors: [
                           TColor.primaryTopIcon,
                           TColor.primaryBottomIcon,
-
                         ],
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
@@ -42,7 +48,9 @@ class _YourFolderViewState extends State<YourLibraryView> {
                       borderRadius: BorderRadius.circular(25)
                     ),
                     child: IconButton(
-                      onPressed: (){},
+                      onPressed: (){
+
+                      },
                       splashRadius: 26,
                       icon: Icon(
                         Icons.add,
@@ -82,7 +90,9 @@ class _YourFolderViewState extends State<YourLibraryView> {
                         borderRadius: BorderRadius.circular(25)
                     ),
                     child: IconButton(
-                        onPressed: (){},
+                        onPressed: (){
+                          Get.to(ListSongFavourite(songHandler: widget.songHandler));
+                        },
                         color: TColor.darkGray,
                         splashRadius: 26,
                         icon: Icon(
@@ -195,7 +205,6 @@ class _YourFolderViewState extends State<YourLibraryView> {
                 scrollDirection: Axis.vertical,
                 itemCount: 4,
                 itemBuilder: (context,index){
-                  var mOBJ = homeVM.forYouListArr[index];
                   return; //LibraryCell(mObj: mOBJ,);
                 },
               ),
@@ -243,4 +252,5 @@ class _YourFolderViewState extends State<YourLibraryView> {
       ),
     );
   }
+
 }
