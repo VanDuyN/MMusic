@@ -6,6 +6,7 @@ import 'package:mmusic/api/api.dart';
 import 'package:mmusic/common/color_extension.dart';
 import 'package:mmusic/services/song_handler.dart';
 import 'package:mmusic/view/main_player_music_view/main_player_view.dart';
+import 'package:mmusic/view_model/home_view_model.dart';
 
 import 'package:mmusic/view_model/song_model.dart';
 
@@ -15,6 +16,22 @@ class ForYouCell extends StatelessWidget {
   final SongHandler songHandler;
 
   const ForYouCell({super.key, required this.mObj, required this.songHandler});
+  Future<void> _initSongsAndNavigate() async {
+    if(songHandler.queue.value.isEmpty || mObj.name != songHandler.mediaItem.value!.title ){
+      songHandler.initSongs(song: mObj);
+      Get.to(() => MainPlayerView(
+        songHandler: songHandler,
+        isLast: false,
+        name: mObj.name,
+      ));
+      return;
+    }
+    Get.to(() => MainPlayerView(
+      songHandler: songHandler,
+      isLast: false,
+      name: mObj.name,
+    ));
+  }
   Future<String> getNameArtist(String id) async {
     String name;
     final jsonResponse = jsonDecode(await API().getArtistById(id));
@@ -46,12 +63,7 @@ class ForYouCell extends StatelessWidget {
           children: [
             InkWell(
               onTap: () {
-                songHandler.initSongs(song: mObj);
-                Get.to(() => MainPlayerView(
-                  songHandler: songHandler,
-                  isLast: false,
-                  name: mObj.name,
-                ));
+                _initSongsAndNavigate();
               },
               child:ClipRRect(
                 borderRadius: BorderRadius.circular(9),

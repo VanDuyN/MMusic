@@ -17,6 +17,7 @@ class SongHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
     return ProgressiveAudioSource(Uri.parse(url + song.song));
   }
   String category = "";
+  String  nameArtist ="";
   Future<String> getNameArtist(String id) async {
     // Khai báo biến name với kiểu dữ liệu String
     String name;
@@ -72,6 +73,8 @@ class SongHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
 
   // Function to initialize the songs and set up the audio player
   Future<void> initListSongs({required List<SongModel> songs}) async {
+    audioPlayer.playbackEventStream.listen(_broadcastState);
+
     try {
       if (songs.isEmpty) {
         debugPrint('No songs to initialize.');
@@ -83,10 +86,6 @@ class SongHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
       // Đặt AudioSource cho audioPlayer
       await audioPlayer.setAudioSource(ConcatenatingAudioSource(children: audioSources));
       await audioPlayer.load();
-
-      // Cập nhật queue với danh sách các MediaItem
-      final List<MediaItem> mediaItems = [];
-
       // Tạo danh sách các Future để lấy duration
       final List<Future<MediaItem>> durationFutures = [];
 
@@ -104,13 +103,14 @@ class SongHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
           final duration = tempPlayer.duration ?? Duration.zero;
 
           return MediaItem(
-            id: '${API().getUrl()}${song.song}',
-            title: song.name,
-            artist: await getNameArtist(song.idArtist.join('')), // Lấy tên artist
-            displayDescription: song.id.toString(),
-            artUri: Uri.parse('${API().getUrl()}${song.image}'),
-            duration: duration,
-            genre: song.idCategory.first
+              id: '${API().getUrl()}${song.song}',
+              title: song.name,
+              artist: await getNameArtist(song.idArtist.join('')), // Lấy tên artist
+              displayDescription: song.id.toString(),
+              artUri: Uri.parse('${API().getUrl()}${song.image}'),
+              duration: duration,
+              genre: song.idCategory.first,
+              displaySubtitle: song.lyrics
           );
         });
 
@@ -148,9 +148,7 @@ class SongHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
     final artistName = await getNameArtist(song.idArtist.join(''));
 
     // Check if the song is already in the queue
-    final existingIndex = queue.value.indexWhere((item) => item.id == '${API().getUrl()}${song.song}');
-    if (existingIndex == 0) {
-    } else {
+
       // Song is not in the queue, add it
       queue.value.clear();
 
@@ -165,6 +163,7 @@ class SongHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
           displayDescription: song.id.toString(),
           artUri: Uri.parse('$url${song.image}'),
           duration: audioSource.duration,
+          displaySubtitle: song.lyrics
         ),
       );
 
@@ -177,7 +176,7 @@ class SongHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
       audioPlayer.processingStateStream.listen((state) {
         if (state == ProcessingState.completed) skipToNext();
       });
-    }
+
   }
 
 

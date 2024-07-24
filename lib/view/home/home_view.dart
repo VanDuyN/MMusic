@@ -6,12 +6,14 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:mmusic/api/api.dart';
 import 'package:mmusic/common/color_extension.dart';
 import 'package:mmusic/common_widget/artist_cell.dart';
+import 'package:mmusic/common_widget/continue_cell.dart';
 import 'package:mmusic/common_widget/for_you_cell.dart';
 import 'package:mmusic/common_widget/recently_cell.dart';
 import 'package:mmusic/common_widget/title_selection.dart';
 import 'package:mmusic/components/player_deck.dart';
 import 'package:mmusic/services/song_handler.dart';
 import 'package:mmusic/view/login/login_view.dart';
+import 'package:mmusic/view_model/album_model.dart';
 import 'package:mmusic/view_model/arist_model.dart';
 import 'package:mmusic/view_model/category_model.dart';
 import 'package:mmusic/view_model/home_view_model.dart';
@@ -28,7 +30,7 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final AutoScrollController _autoScrollController = AutoScrollController();
-
+  final homeVM = Get.put(HomeViewModel());
   late final SharedPreferences prefs;
   late bool isCheckUser = false;
   late String linkImg ="";
@@ -65,8 +67,7 @@ class _HomeViewState extends State<HomeView> {
     });
 
   }
-  final homeVM = Get.put(HomeViewModel());
-  @override
+
   @override
   Widget build(BuildContext context) {
     var media = MediaQuery.sizeOf(context);
@@ -74,196 +75,18 @@ class _HomeViewState extends State<HomeView> {
     final Future<List<Artist>> artistArr = HomeViewModel().getDataArist();
     final Future<List<SongModel>> songArr = HomeViewModel().getDataSong();
     final Future<List<CategoryModel>> categoriesArr = HomeViewModel().getAllCategory();
+    final Future<List<AlbumModel>> albumArr = HomeViewModel().getAllAlbum();
+
     return Scaffold(
       key: splashVM.scaffoldKey,
-      drawer: Drawer(
-        backgroundColor: TColor.bg,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            SizedBox(
-              height: 280,
-              child: DrawerHeader(
-                decoration: BoxDecoration(
-                  color: TColor.primaryText.withOpacity(0.07),
-                ),
-                child: Column(
-                  children: [
-                    Image.asset(
-                      "assets/img/logo_app.png",
-                      width: media.width * 0.30,
-                    ),
-                    const SizedBox(height: 5,),
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Column(
-                          children: [
-                            Text(
-                              "328\nSongs",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Color(0xffC1C0C0),
-                                fontSize: 13,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              "52\nAlbums",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Color(0xffC1C0C0),
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              "87\nArtists",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Color(0xffC1C0C0),
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],)
-                  ],
-                ),
-              ),
-            ),
-            !isCheckUser
-                ? ListTile(
-              leading: Icon(
-                Icons.person,
-                color: TColor.primary,
-                size: 24,
-              ),
-              title: Text(
-                "Đăng nhập",
-                style: TextStyle(
-                  color: TColor.primaryText.withOpacity(0.9),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              onTap: () {
-                Get.to(() => LoginView(songHandler: widget.songHandler,));
-                splashVM.closeDrawer();
-              },
-            ) :
-            Column(
-              children: [
-                ListTile(
-                    leading: Icon(
-                      Icons.person,
-                      color: TColor.primary,
-                      size: 24,
-                    ),
-                    title: Text(
-                      "Thông tin cá nhân",
-                      style: TextStyle(
-                        color: TColor.primaryText.withOpacity(0.9),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    onTap: () {
-                      splashVM.closeDrawer();
-                    }
-                ),
-                Divider(
-                  color: TColor.primary.withOpacity(0.3),
-                  indent: 70,
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.logout,
-                    color: TColor.primary,
-                    size: 24,
-                  ),
-                  title: Text(
-                    "Đăng xuất",
-                    style: TextStyle(
-                      color: TColor.primaryText.withOpacity(0.9),
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  onTap: () {
-                    Get.to(() => LoginView(songHandler: widget.songHandler,));
-                    prefs.remove('token');
-                    isCheckUser == false;
-                    setState(() {
-                    });
-                    splashVM.closeDrawer();
-                  },
-                ),
-                Divider(
-                  color: TColor.primaryText.withOpacity(0.3),
-                  indent: 70,
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
+      drawer: _buildDrawer(media, splashVM),
       appBar: AppBar(
         titleSpacing: 0.0,
         leadingWidth: 70,
         backgroundColor: TColor.primary30,
         elevation: 0,
-        leading: IconButton(
-          onPressed: () {
-            Get.find<SplashViewModel>().openDrawer();
-          },
-          icon: CircleAvatar(
-            radius: 49,
-            backgroundColor: TColor.primary,
-            child: Padding(
-              padding: const EdgeInsets.all(5), // Border radius
-              child: ClipOval(
-                child: Image.network(
-                    linkImg,
-                    width: 35,
-                    height: 35,
-                    fit: BoxFit.cover,
-                    errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                      return Image.asset(
-                          "assets/img/logo_app.png",
-                          width: 80,
-                          height: 80,
-                          color: TColor.primaryText,
-                          fit: BoxFit.cover
-                      );
-                    }
-                ),
-              ),
-            ),
-          ),
-        ),
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Chào mừng quay chở lại !",
-              style: TextStyle(
-                  color: TColor.primaryText,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600
-              ),),
-            Text("mmusic",
-              style: TextStyle(
-                color: TColor.primaryText60,
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-              ),)
-          ],),
+        leading: _buildLeading(),
+        title: _buildTitle(),
         actions: [
           IconButton(
               onPressed: () {},
@@ -310,110 +133,30 @@ class _HomeViewState extends State<HomeView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const TitleSelection(title: "Danh sách phát đề xuất"),
-                  SizedBox(
-                    child: GridView.builder(
-                      shrinkWrap: true,
-                      primary: false,
-                      padding: const EdgeInsets.only(left: 15, right: 5),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 3,
-                        mainAxisSpacing: 3,
-                        mainAxisExtent: 83,),
-                      itemCount: 6,
-                      itemBuilder: (context, index) {
-                        //var mOBJ = homeVM.continueListeningArr[index];
-                        return //ContinueCell(mObj: mOBJ,);
-                          ;
-                      },
-                    ),
-                  ),
+                  const SizedBox(height: 25,),
+                  const TitleSelection(title: "Album nghe nhiều"),
+                  const SizedBox(height: 5,),
+                  _buildAlbum(context,albumArr),
+
+                  const SizedBox(height: 20,),
+
                   const TitleSelection(title: "Thể loại đề xuất"),
-                  FutureBuilder<List<CategoryModel>>(
-                    future: categoriesArr,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
-                      } else if (snapshot.hasError) {
-                        return Center(child: Text('Error: ${snapshot.error}'));
-                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return const Center(child: Text('No data found'));
-                      } else {
-                        final categories = snapshot.data!;
-                        return SizedBox(
-                          height: 200,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: categories.length,
-                            itemBuilder: (context, index) {
-                              return RecentlyCell(category: categories[index], songHandler: widget.songHandler);
-                            },
-                          ),
-                        );
-                      }
-                    },
-                  ),
+
+                  _buildCategories(context,categoriesArr),
+                  const  SizedBox(height: 20,),
                   const TitleSelection(title: "Dành cho bạn"),
-                  Container(
-                    height: 250,
-                    child: FutureBuilder<List<SongModel>>(
-                      future: songArr,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return const Center(child: CircularProgressIndicator());
-                        } else if (snapshot.hasError) {
-                          return Center(child: Text('Error: ${snapshot.error}'));
-                        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                          return const Center(child: Text('No data found'));
-                        } else {
-                          final songs = snapshot.data!;
-                          return ListView.builder(
-                            padding: const EdgeInsets.only(left: 10),
-                            scrollDirection: Axis.horizontal,
-                            itemCount: songs.length,
-                            itemBuilder: (context, index) {
-                              return ForYouCell(mObj: songs[index], songHandler: widget.songHandler);
-                            },
-                          );
-                        }
-                      },
-                    ),
-                  ),
+                  const SizedBox(height: 10,),
+
+                  _buildSongs(context,songArr),
 
                   const TitleSelection(title: "Nghệ sĩ"),
-                  SizedBox(
-                    height: 220,
-                    child: FutureBuilder<List<Artist>>(
-                      future: artistArr,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return const Center(child: CircularProgressIndicator());
-                        } else if (snapshot.hasError) {
-                          return Center(child: Text('Error: ${snapshot.error}'));
-                        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                          return const Center(child: Text('No data found'));
-                        } else {
-                          List<Artist> artists = snapshot.data!;
-                          return ListView.builder(
-                            padding: const EdgeInsets.only(left: 20),
-                            scrollDirection: Axis.horizontal,
-                            itemCount: artists.length,
-                            itemBuilder: (context, index) {
-                              Artist artist = artists[index];
-                              return ArtistCell(mObj: artist,songHandler: widget.songHandler,);
-                            },
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                   PlayerDeck(
-                    songHandler: widget.songHandler,
-                    isLast: true,
-                    onTap: () {},
-                  ),
-                ],),
+
+                  _buildArtist(context, artistArr),
+
+                   PlayerDeck(songHandler: widget.songHandler, isLast: true, onTap: () {},),
+
+                ],
+              ),
             ),
             _buildPlayerDeck(),
           ],
@@ -421,6 +164,197 @@ class _HomeViewState extends State<HomeView> {
       ),
     );
   }
+  Widget _buildTitle(){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("Chào mừng quay chở lại !",
+          style: TextStyle(
+              color: TColor.primaryText,
+              fontSize: 15,
+              fontWeight: FontWeight.w600
+          ),),
+        Text("mmusic",
+          style: TextStyle(
+            color: TColor.primaryText60,
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+          ),)
+      ],
+    );
+  }
+  Widget _buildDrawer(var media ,var splashVM){
+    return Drawer(
+      backgroundColor: TColor.bg,
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          SizedBox(
+            height: 280,
+            child: DrawerHeader(
+              decoration: BoxDecoration(
+                color: TColor.primaryText.withOpacity(0.07),
+              ),
+              child: Column(
+                children: [
+                  Image.asset(
+                    "assets/img/logo_app.png",
+                    width: media.width * 0.30,
+                  ),
+                  const SizedBox(height: 5,),
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Column(
+                        children: [
+                          Text(
+                            "328\nSongs",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Color(0xffC1C0C0),
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            "52\nAlbums",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Color(0xffC1C0C0),
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            "87\nArtists",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Color(0xffC1C0C0),
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],)
+                ],
+              ),
+            ),
+          ),
+          !isCheckUser
+              ? ListTile(
+            leading: Icon(
+              Icons.person,
+              color: TColor.primary,
+              size: 24,
+            ),
+            title: Text(
+              "Đăng nhập",
+              style: TextStyle(
+                color: TColor.primaryText.withOpacity(0.9),
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            onTap: () {
+              Get.to(() => LoginView(songHandler: widget.songHandler,));
+              splashVM.closeDrawer();
+            },
+          ) :
+          Column(
+            children: [
+              ListTile(
+                  leading: Icon(
+                    Icons.person,
+                    color: TColor.primary,
+                    size: 24,
+                  ),
+                  title: Text(
+                    "Thông tin cá nhân",
+                    style: TextStyle(
+                      color: TColor.primaryText.withOpacity(0.9),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  onTap: () {
+                    splashVM.closeDrawer();
+                  }
+              ),
+              Divider(
+                color: TColor.primary.withOpacity(0.3),
+                indent: 70,
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.logout,
+                  color: TColor.primary,
+                  size: 24,
+                ),
+                title: Text(
+                  "Đăng xuất",
+                  style: TextStyle(
+                    color: TColor.primaryText.withOpacity(0.9),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                onTap: () {
+                  Get.to(() => LoginView(songHandler: widget.songHandler,));
+                  prefs.remove('token');
+                  isCheckUser == false;
+                  setState(() {
+                  });
+                  splashVM.closeDrawer();
+                },
+              ),
+              Divider(
+                color: TColor.primaryText.withOpacity(0.3),
+                indent: 70,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+  Widget _buildLeading(){
+    return  IconButton(
+      onPressed: () {
+        Get.find<SplashViewModel>().openDrawer();
+      },
+      icon: CircleAvatar(
+        radius: 49,
+        backgroundColor: TColor.primary,
+        child: Padding(
+          padding: const EdgeInsets.all(5), // Border radius
+          child: ClipOval(
+            child: Image.network(
+                linkImg,
+                width: 35,
+                height: 35,
+                fit: BoxFit.cover,
+                errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                  return Image.asset(
+                      "assets/img/logo_app.png",
+                      width: 80,
+                      height: 80,
+                      color: TColor.primaryText,
+                      fit: BoxFit.cover
+                  );
+                }
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+  
   Widget _buildPlayerDeck() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -432,6 +366,133 @@ class _HomeViewState extends State<HomeView> {
             onTap: _scrollTo,
           ),
         ]
+    );
+  }
+
+  Widget _buildAlbum(BuildContext context, Future<List<AlbumModel>> albumArr) {
+    return SizedBox(
+      height: 250,
+      child: FutureBuilder<List<AlbumModel>>(
+        future: albumArr,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return const Center(child: Text('Đã xảy ra lỗi'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('Không có dữ liệu album'));
+          }
+          final albums = snapshot.data!;
+          return GridView.builder(
+            key: const PageStorageKey('album'),
+            shrinkWrap: true,
+            primary: false,
+            padding: const EdgeInsets.only(left: 15, right: 5),
+            physics: const NeverScrollableScrollPhysics(), // Vô hiệu hóa cuộn
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 3,
+              mainAxisSpacing: 3,
+              mainAxisExtent: 83,
+            ),
+            itemCount: albums.length >= 6 ? 6 : albums.length,
+            itemBuilder: (context, index) {
+              return ContinueCell(
+                album: albums[index],
+                songHandler: widget.songHandler,
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+
+
+  Widget _buildCategories(BuildContext context, final Future<List<CategoryModel>> categoriesArr){
+    return SizedBox(
+      height: 200,
+      child: FutureBuilder<List<CategoryModel>>(
+        future: categoriesArr,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('No data found'));
+          } else {
+            final categories = snapshot.data!;
+            return  ListView.builder(
+              key:const  PageStorageKey('categories'),
+              scrollDirection: Axis.horizontal,
+              itemCount: categories.length >= 10 ? 10 : categories.length,
+              itemBuilder: (context, index) {
+                return RecentlyCell(category: categories[index], songHandler: widget.songHandler);
+              },
+
+            );
+          }
+        },
+      ),
+    );
+  }
+  
+  Widget _buildSongs(BuildContext context,Future<List<SongModel>> songArr){
+    return SizedBox(
+      height: 250,
+      child: FutureBuilder<List<SongModel>>(
+        future: songArr,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('No data found'));
+          } else {
+            final songs = snapshot.data!;
+            return ListView.builder(
+              key: const PageStorageKey('song'),
+              padding: const EdgeInsets.only(left: 10),
+              scrollDirection: Axis.horizontal,
+              itemCount: songs.length >= 20 ? 20 : songs.length,
+              itemBuilder: (context, index) {
+                return ForYouCell(mObj: songs[index], songHandler: widget.songHandler);
+              },
+            );
+          }
+        },
+      ),
+    );
+  }
+  Widget _buildArtist(BuildContext context, Future<List<Artist>> artistArr){
+    return SizedBox(
+      height: 220,
+      child: FutureBuilder<List<Artist>>(
+        future: artistArr,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('No data found'));
+          } else {
+            List<Artist> artists = snapshot.data!;
+            return ListView.builder(
+              key:const PageStorageKey('artist'),
+              padding: const EdgeInsets.only(left: 20),
+              scrollDirection: Axis.horizontal,
+              itemCount: artists.length > 10 ? 10 : artists.length,
+              itemBuilder: (context, index) {
+                Artist artist = artists[index];
+                return ArtistCell(mObj: artist,songHandler: widget.songHandler,);
+              },
+            );
+          }
+        },
+      ),
     );
   }
 }

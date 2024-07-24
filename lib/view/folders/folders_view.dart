@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mmusic/common/color_extension.dart';
 import 'package:mmusic/components/player_deck.dart';
 import 'package:mmusic/services/song_handler.dart';
+import 'package:mmusic/view/folders/albums_view.dart';
 import 'package:mmusic/view/folders/your_artist_view.dart';
 import 'package:mmusic/view/folders/your_folder_view.dart';
 import 'package:mmusic/view/folders/your_library_view.dart';
@@ -133,7 +134,7 @@ class _FoldersViewState extends State<FoldersView> with SingleTickerProviderStat
                 YourFolderView(songHandler: widget.songHandler,),
                 const YourPlaylistView(),
                 const YourArtistView(),
-                const Center(child: Text("Thư mục"),),
+                const AlbumsView(),
               ]
             )
             ),

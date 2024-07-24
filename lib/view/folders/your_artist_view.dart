@@ -86,7 +86,7 @@ class _YourArtistViewState extends State<YourArtistView> {
                 itemCount: 4,
                 itemBuilder: (context,index){
                   var mOBJ = homeVM.artistListArr[index];
-                  return YourArtistCell(mObj: mOBJ,);
+                  return ;//YourArtistCell(mObj: mOBJ,);
                 },
               ),
             ),

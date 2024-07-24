@@ -15,7 +15,8 @@ class SongsPlaylistCell extends StatelessWidget {
     required this.mObj,
     required this.songHandler,
     required this.isArtist,
-    required this.songs, required this.index});
+    required this.songs,
+    required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +51,7 @@ class SongsPlaylistCell extends StatelessWidget {
                 mObj.artUri.toString(),
                 width: 60,
                 height: 60,
-                fit: BoxFit.fill,
+                fit: BoxFit.cover,
               ),
             ),
             Container(
@@ -59,12 +60,15 @@ class SongsPlaylistCell extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(mObj.title,
-                    style: TextStyle(
-                        color: TColor.primaryText,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700
-                    ),),
+                  Container(
+                    width: 240,
+                    child: Text(mObj.title,
+                      style: TextStyle(
+                          color: TColor.primaryText,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700
+                      ),),
+                  ),
                   Text(isArtist ? "" : mObj.artist.toString(),
                     style: TextStyle(
                         color: TColor.primaryText60,
@@ -94,7 +98,8 @@ class SongsPlaylistCell extends StatelessWidget {
             MainPlayerView(
               songHandler: songHandler,
               isLast: false,
-              name: playing!.artist.toString(),)
+              name:  playing!.title,
+            )
         );
       },
       child: Container(
@@ -121,10 +126,11 @@ class SongsPlaylistCell extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
+                    width: 240,
                     child: Text(mObj.title,
                       style: TextStyle(
                           color: TColor.primaryText,
-                          fontSize: 16,
+                          fontSize: 15,
                           fontWeight: FontWeight.w700
                       ),),
                   ),

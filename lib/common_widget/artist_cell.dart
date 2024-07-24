@@ -19,19 +19,23 @@ class ArtistCell extends StatelessWidget {
       Get.to(() => ListSongArtist(songHandler: songHD, mObj: mObj));
       return; // Dừng thực hiện tiếp tục nếu không có bài hát
     }
-    final currentMediaItem = songHandler.mediaItem.value;
-    final shouldInitSongs = currentMediaItem == null ||
-        currentMediaItem.artist != mObj.name ||
-        (currentMediaItem.artist == mObj.name && songs.length > 1);
+    final currentMediaItem = songHandler.mediaItem.value!;
 
-    if (shouldInitSongs) {
+
+
+    if(currentMediaItem.artist != songHandler.nameArtist || songHandler.queue.value.length <= 1 || songHandler.mediaItem.value == null){
+      songHandler.category = "";
+      songHandler.nameArtist = mObj.name;
       songHandler.queue.value.clear();
       songHandler.initListSongs(songs: songs);
       Get.to(() => ListSongArtist(songHandler: songHandler, mObj: mObj));
+      return;
     } else {
       Get.to(() => ListSongArtist(songHandler: songHandler, mObj: mObj));
+      return;
     }
   }
+
   @override
   Widget build(BuildContext context) {
     final url =API().getUrl();

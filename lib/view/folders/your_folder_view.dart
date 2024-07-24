@@ -57,7 +57,7 @@ class _YourFolderState extends State<YourFolderView> {
                   Container(
                     margin: const EdgeInsets.only(left: 5),
                     child: Text(
-                      "Thêm danh sách phát",
+                      "Thêm thư mục mới",
                       style: TextStyle(
                           color: TColor.primaryText,
                           fontSize: 20,

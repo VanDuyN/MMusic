@@ -7,6 +7,7 @@ class SongModel {
   final List<String> idCategory;
   final String song;
   final String image;
+  final String lyrics;
   SongModel({
     required this.id,
     required this.name,
@@ -14,7 +15,7 @@ class SongModel {
     required this.idCategory,
     required this.song,
     required this.image,
-
+    required this.lyrics
   });
 
   factory SongModel.fromJson(Map<String, dynamic> json) {
@@ -25,6 +26,7 @@ class SongModel {
       idCategory: List<String>.from(json['idCastegory']),
       song: json['song'],
       image: json['image'],
+      lyrics: json['lirics']
     );
   }
 
@@ -36,6 +38,7 @@ class SongModel {
       'idCastegory': idCategory,
       'song': song,
       'image': image,
+      'lirics':lyrics
     };
   }
 }

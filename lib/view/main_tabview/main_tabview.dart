@@ -37,7 +37,7 @@ class _MainTabViewState extends State<MainTabview> with SingleTickerProviderStat
         children: [
           TabBarView(controller: controller,children: [
             HomeView(songHandler: widget.songHandler,),
-            const SearchView(),
+            SearchView(songHandler: widget.songHandler,),
             FoldersView(songHandler: widget.songHandler,),
           ],
           ),

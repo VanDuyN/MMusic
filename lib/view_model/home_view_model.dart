@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mmusic/api/api.dart';
+import 'package:mmusic/view_model/album_model.dart';
 import 'package:mmusic/view_model/arist_model.dart';
 import 'package:mmusic/view_model/category_model.dart';
 import 'package:mmusic/view_model/song_model.dart';
@@ -40,16 +41,38 @@ class HomeViewModel extends GetxController{
       List<dynamic> data = jsonResponse['success'];
       return data.map((item) => SongModel.fromJson(item)).toList();
     }
-
+    return [];
+  }
+  Future<List<SongModel>> getSongByIds(List<String> id) async {
+    var jsonResponse = jsonDecode(await API().getSongByIds(id));
+    debugPrint(id.toString());
+    if (jsonResponse['status']) {
+      List<dynamic> data = jsonResponse['success'];
+      debugPrint(jsonResponse['success'].toString());
+      return data.map((item) => SongModel.fromJson(item)).toList();
+    }
     return [];
   }
   Future<List<CategoryModel>> getAllCategory() async {
     var jsonResponse = jsonDecode(await API().getAllCategories());
     if (jsonResponse['status']) {
       List<dynamic> data = jsonResponse['success'];
+
       return data.map((item) => CategoryModel.fromJson(item)).toList();
     }
     return [];
+  }
+  Future<List<AlbumModel>> getAllAlbum() async {
+    var jsonResponse = jsonDecode(await API().getAllAlbum());
+    if (jsonResponse['status']) {
+      List<dynamic> data = jsonResponse['success'];
+      return data.map((item) => AlbumModel.fromJson(item)).toList();
+    }
+    return [];
+  }
+  Future<bool> checkFavourite(String id,String email) async {
+    var jsonResponse = jsonDecode(await API().checkFavourite(id,email));
+    return (jsonResponse['status']) ;
   }
 
   final txtSearch= TextEditingController().obs;
@@ -111,16 +134,16 @@ class HomeViewModel extends GetxController{
   //Nghe gần đây
   final  recentlyListArr =[
     {
-      "image":"assets/img/img_7.png",
+      "image":"assets/img/img_1.png",
       "name":"Pop Mix"
     },{
-      "image":"assets/img/img_7.png",
+      "image":"assets/img/img_2.png",
       "name":"Pop Mix"
     },{
-      "image":"assets/img/img_7.png",
+      "image":"assets/img/img_3.png",
       "name":"Pop Mix"
     },{
-      "image":"assets/img/img_7.png",
+      "image":"assets/img/img_4.png",
       "name":"Pop Mix"
     },{
       "image":"assets/img/img_7.png",
